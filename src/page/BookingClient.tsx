@@ -116,7 +116,7 @@ const BookingClient = () => {
     }
 
     return (
-        <div className="min-h-screen flex flex-col items-center px-4 mt-10">
+        <div className=" flex flex-col items-center px-4 mt-10">
             <div className="w-full md:w-1/2 text-center mb-10 flex items-center justify-center">
                 {/* Left arrow for redirect */}
                 <Link to="/" className="mr-4 flex items-center">
