@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { FaArrowRightToBracket } from 'react-icons/fa6'
 
-import { getToken, removeToken } from '../../../utils/cookiesFunc'
+import { getToken, removeToken, tokenDecodeFunc } from '../../../utils/cookiesFunc'
 import AvatarDropdown from '../AvatarDropdown'
 import { useUser } from '../../../context/UserContext'
 
@@ -11,7 +11,9 @@ export const HeaderClient = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        const token = getToken()
+const getTokenFromCookies = getToken()
+        const token = getTokenFromCookies && tokenDecodeFunc(getTokenFromCookies)
+        console.log("header token::::: ",token)
         if (token) {
             setUserCTX({ name: token.name, role: token.role })
         }

@@ -1,4 +1,6 @@
 import Cookies from 'js-cookie';
+import {jwtDecode} from 'jwt-decode'
+import { DecodedToken } from '../types/User';
 
 export type Token = {
   token: string;
@@ -6,6 +8,7 @@ export type Token = {
   role: string;
   expiresIn:string;
 };
+
 
 export const saveToken = (token: string) => {
   Cookies.set('token', JSON.stringify(token));
@@ -17,9 +20,16 @@ export const getToken = () => {
   if (tokenObj) {
     token = JSON.parse(tokenObj);
   }
+  console.log("func token:::: ",token)
   return token ? token : null;
 };
 
 export const removeToken = () => {
   Cookies.remove('token');
 };
+
+export const tokenDecodeFunc = (token: string) =>{
+const tokenString = token.split(" ")[1]
+const user = jwtDecode<DecodedToken>(tokenString)
+return {name: user.name, role: user.role}
+}

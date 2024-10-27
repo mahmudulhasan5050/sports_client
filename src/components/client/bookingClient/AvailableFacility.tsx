@@ -16,6 +16,7 @@ type AvailableFacilityProps = {
     setAvailableGameDurations: (availableCourt: number[]) => void
     setLoadingDuration: (loading: boolean) => void
     setError: (error: string | null) => void
+    
 }
 
 const AvailableFacility = ({

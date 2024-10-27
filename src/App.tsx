@@ -1,6 +1,6 @@
 import React from 'react'
 import './index.css'
-import { Routes, Route,useLocation  } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 
 import { UserProvider } from './context/UserContext'
 import Home from './page/Home'
@@ -24,13 +24,14 @@ import BookingSuccess from './components/client/BookingSuccess'
 import ForgotPassword from './page/ForgotPassword'
 import ResetPassword from './page/ResetPassword'
 import RefundMain from './page/admin/RefundMain'
+import GoogleAuthSuccess from './page/client/GoogleAuthSuccess'
 
 function App() {
-    const location = useLocation();
-    const isAdminRoute = location.pathname.startsWith('/admin');
+    const location = useLocation()
+    const isAdminRoute = location.pathname.startsWith('/admin')
     return (
         <UserProvider>
-         {!isAdminRoute && <HeaderClient />}
+            {!isAdminRoute && <HeaderClient />}
 
             <Routes>
                 {/* Booking operation pages */}
@@ -45,7 +46,7 @@ function App() {
                 <Route path="/check-your-email" element={<CheckYourEmail />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/reset-password/:token" element={<ResetPassword />} />
-
+                <Route path="/google-auth-success/:token" element={<GoogleAuthSuccess />} />
                 {/* <Route path="/" element={<LayoutClient />}>
                     <Route path="booking-client/:facilityName" element={<BookingClient />} />
                     <Route path="booking-summary" element={<BookingSummary />} />
@@ -60,7 +61,7 @@ function App() {
                     <Route path="openinghour" element={<OpeningHourMain />} />
                     <Route path="booking" element={<BookingMain />} />
                     <Route path="user" element={<UserMain />} />
-                    <Route path='refund' element={<RefundMain/>}/>
+                    <Route path="refund" element={<RefundMain />} />
                 </Route>
             </Routes>
         </UserProvider>

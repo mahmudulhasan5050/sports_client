@@ -13,3 +13,16 @@ export type User = {
     email: string;
     password: string;
   }
+
+  export type DecodedToken = {
+    sub: string;
+    name: string;
+    role: string;
+    iat: number;
+    exp: number;
+  }
+
+  // export type UserInfoFromToken = {
+  //   name: string;
+  //   role: string;
+  // }

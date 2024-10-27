@@ -17,6 +17,8 @@ export const axiosForgotPassword = async({email}:{email:string})=>
    await API.post('/auth/forgot-password', {email})
 export const axiosResetPassword = async(token: string, {password}:{password: string})=> 
     await API.post(`/auth/reset-password/${token}`, {password})
+//auth Google
+export const axiosGoogleSignIn = async()=> await API.get('/auth/google')
 
 //When user is trying to create a booking
 //find available time.Param: facility and date (object body)

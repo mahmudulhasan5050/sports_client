@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { FaArrowLeft } from 'react-icons/fa'
@@ -33,6 +33,10 @@ const BookingClient = () => {
     const { facilityName } = useParams<{ facilityName: string }>()
     const navigate = useNavigate()
 
+    const availableFacilityRef = useRef<HTMLDivElement>(null)
+    // const durationRef = useRef<HTMLDivElement>(null)
+    // const confirmButtonRef = useRef<HTMLDivElement>(null)
+
     // These hooks are get available data from database
     const [date, setDate] = useState<string>(todayToString)
     const [availableTime, setAvailableTime] = useState<string[]>([])
@@ -51,13 +55,19 @@ const BookingClient = () => {
     // Loading state
     const [error, setError] = useState<string | null>(null) // Error state
 
+
+    const smoothScrollTo = (ref: React.RefObject<HTMLDivElement>) => {
+        if (ref.current) {
+            ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+    }
+
     useEffect(() => {
         const facilityNDateObj = {
             selectedDate: date,
             facilityName: facilityName!
         } as AxiosRequestForFetchDataType
 
-        try {
             const getAvailableTime = async () => {
                 try {
                     setLoading(true)
@@ -73,13 +83,13 @@ const BookingClient = () => {
                 }
             }
             getAvailableTime()
-        } catch (error) {}
     }, [date, facilityName])
 
     const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setDate(e.target.value)
         clearState()
     }
+
 
     const handleBooking = () => {
         if (time !== '' && duration !== 0 && facilityId !== '') {
@@ -114,6 +124,7 @@ const BookingClient = () => {
         setFacilityId('')
         setDuration(0)
     }
+
 
     return (
         <div className=" flex flex-col items-center px-4 mt-10">
@@ -164,6 +175,7 @@ const BookingClient = () => {
                                     setAvailableCourts={setAvailableCourts}
                                     setLoadingFacility={setLoadingFacility}
                                     setError={setError}
+                            
                                 />
                             ))}
                     </div>

@@ -16,6 +16,7 @@ type TimeSlotProps = {
     setAvailableCourts: (availableCourt: Facility[]) => void
     setLoadingFacility: (loading: boolean) => void
     setError: (error: string | null) => void
+
 }
 
 const TimeSlot = ({
@@ -28,7 +29,8 @@ const TimeSlot = ({
     setTime,
     setAvailableCourts,
     setLoadingFacility,
-    setError
+    setError,
+   
 }: TimeSlotProps) => {
     //select time and get available facility
     useEffect(() => {
@@ -55,6 +57,7 @@ const TimeSlot = ({
     }
 
     return (
+
         <button
             className={classNames(
                 'bg-gradient-to-tl font-bold py-2 px-4 rounded shadow-md',
@@ -64,6 +67,7 @@ const TimeSlot = ({
         >
             {timeSlot.slice(0, 2) + ':' + timeSlot.slice(2)}
         </button>
+
     )
 }
 

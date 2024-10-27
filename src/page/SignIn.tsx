@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { FcGoogle } from "react-icons/fc";
 
 
 import { SignInType } from '../types/User'
-import { axiosSignIn } from '../axios'
-import { saveToken } from '../utils/cookiesFunc'
+import { axiosGoogleSignIn, axiosSignIn } from '../axios'
+import { saveToken, tokenDecodeFunc } from '../utils/cookiesFunc'
 import { useUser } from '../context/UserContext'
 
 const SignIn = () => {
@@ -15,7 +16,7 @@ const SignIn = () => {
 
     const [error, setError] = useState<string | null>(null)
     const navigate = useNavigate()
-    const { userCTX, setUserCTX } = useUser()
+    const { setUserCTX } = useUser()
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target
@@ -26,18 +27,19 @@ const SignIn = () => {
         e.preventDefault()
         try {
             const res = await axiosSignIn(formData)
+
             if (res.data) {
                 saveToken(res.data)
+                const userFromToken = tokenDecodeFunc(res.data)
                 setUserCTX({
-                    name: res.data.name,
-                    role: res.data.role
+                    name: userFromToken.name,
+                    role: userFromToken.role
                 })
                 const localStorageBooking = localStorage.getItem('booking')
                 // When user is signin during booking process or user login other situation
                 if (localStorageBooking) {
                     navigate('/booking-summary')
                 } else {
-
                     navigate('/')
                 }
             }
@@ -47,57 +49,85 @@ const SignIn = () => {
         }
     }
 
-    return (
-        <div className="flex items-center justify-center min-h-screen">
-            <form onSubmit={handleSubmit} className="w-full max-w-md p-8 space-y-4 bg-white shadow-lg rounded-lg">
-                <h2 className="text-2xl font-bold">Sign In</h2>
+    const handleGoogleSignin = () => {
+        window.location.href = 'http://localhost:5000/api/v1/auth/google'
+    }
 
-                {error && <p className="text-red-500">{error}</p>}
-                <div className="space-y-2">
-                    <label className="block text-sm font-medium">Email</label>
-                    <input
-                        id="email"
-                        name="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring"
-                        required
-                    />
-                </div>
-                <div className="space-y-2">
-                    <label className="block text-sm font-medium">Password</label>
-                    <input
-                        id="password"
-                        name="password"
-                        type="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring"
-                        required
-                    />
-                </div>
+    return (
+        <div className="flex items-center justify-center min-h-screen bg-gray-100">
+            <div className="w-full max-w-md p-8 space-y-4 bg-white shadow-lg rounded-lg">
+                {/* Google Sign-In Button */}
                 <button
-                    type="submit"
-                    className="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-lg hover:bg-blue-600"
+                    onClick={handleGoogleSignin}
+                    className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-blue-600 bg-white border border-blue-500 rounded-lg hover:bg-blue-100 focus:outline-none focus:ring"
                 >
-                    Sign In
+                    {/* <img
+                        src="https://www.svgrepo.com/show/355037/google.svg"
+                        alt="Google Icon"
+                        className="w-5 h-5 mr-2"
+                    /> */}
+                    <FcGoogle className="w-5 h-5 mr-2"/>
+                    Sign in with Google
                 </button>
 
-                <p className="text-center">
-                    Don't have an account?{' '}
-                    <a href="/signup" className="text-sm text-blue-500 hover:underline">
-                        Register
-                    </a>
-                </p>
+                {/* Sign-In Form */}
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <h2 className="text-2xl font-bold text-center text-gray-800">Sign In</h2>
 
-                <p className="text-center">
-                    Forgot your password?{' '}
-                    <a href="/forgot-password" className="text-sm text-blue-500 hover:underline">
-                        Reset Password
-                    </a>
-                </p>
-            </form>
+                    {error && <p className="text-center text-red-500">{error}</p>}
+
+                    <div className="space-y-2">
+                        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                            Email
+                        </label>
+                        <input
+                            id="email"
+                            name="email"
+                            type="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring"
+                            required
+                        />
+                    </div>
+
+                    <div className="space-y-2">
+                        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                            Password
+                        </label>
+                        <input
+                            id="password"
+                            name="password"
+                            type="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring"
+                            required
+                        />
+                    </div>
+
+                    <button
+                        type="submit"
+                        className="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-lg hover:bg-blue-600"
+                    >
+                        Sign In
+                    </button>
+
+                    <p className="text-center">
+                        Don't have an account?{' '}
+                        <a href="/signup" className="text-sm text-blue-500 hover:underline">
+                            Register
+                        </a>
+                    </p>
+
+                    <p className="text-center">
+                        Forgot your password?{' '}
+                        <a href="/forgot-password" className="text-sm text-blue-500 hover:underline">
+                            Reset Password
+                        </a>
+                    </p>
+                </form>
+            </div>
         </div>
     )
 }

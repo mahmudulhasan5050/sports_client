@@ -3,8 +3,9 @@ import { API as customAxios } from './axiosUrl';
 
 const requestHandler = (request: any) => {
   const tokenObj = getToken();
-  if (tokenObj && tokenObj.token) {
-    request.headers.Authorization = tokenObj.token;
+  console.log("token axios ::::  ", tokenObj)
+  if (tokenObj) {
+    request.headers.Authorization = tokenObj;
   }
   return request;
 };
