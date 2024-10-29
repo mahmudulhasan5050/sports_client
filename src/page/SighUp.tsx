@@ -10,7 +10,7 @@ const SignUp = () => {
     email: '',
     password: '',
   });
-
+  const [error, setError] = useState<string | null>(null)
   const navigate = useNavigate();
 
   const handleChange = (
@@ -32,7 +32,7 @@ const SignUp = () => {
       })
       navigate('/check-your-email')
     } catch (error) {
-      console.error('Registration failed:');
+      setError('Register Failed!')
     }
   };
 
@@ -43,6 +43,7 @@ const SignUp = () => {
         className='w-full max-w-md p-8 space-y-4 bg-white shadow-lg rounded-lg'
       >
         <h2 className='text-2xl font-bold'>Register</h2>
+        {error && <p className="text-center text-red-500">{error}</p>}
         <div className='space-y-2'>
           <label className='block text-sm font-medium'>Name</label>
           <input
