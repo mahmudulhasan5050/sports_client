@@ -3,8 +3,11 @@ import { useParams, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { FaArrowLeft } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
+import ReactDatePicker from 'react-datepicker'
+import { SlCalender } from "react-icons/sl";
+import 'react-datepicker/dist/react-datepicker.css'
 
-import { todayToString, count15DaysFromToday } from '../utils/dates'
+import { todayToString, count15DaysFromToday, todayToString1, count15DaysFromToday1 } from '../utils/dates'
 import { axiosAvailableTime } from '../axios'
 import { Facility } from '../types/Facility'
 import { AxiosRequestForFetchDataType } from '../types/AxiosRequestForFetchData'
@@ -16,9 +19,10 @@ import TimeSlot from '../components/client/bookingClient/TimeSlot'
 import AvailableFacility from '../components/client/bookingClient/AvailableFacility'
 import Duration from '../components/client/bookingClient/Duration'
 import { allUpperCase } from '../utils/upperLowerConvert'
+import moment from 'moment-timezone'
 
 export interface CreateBookingObjType {
-    date: string
+    date: Date
     facilityName: string
     time: string
     duration: number
@@ -34,11 +38,11 @@ const BookingClient = () => {
     const navigate = useNavigate()
 
     const availableFacilityRef = useRef<HTMLDivElement>(null)
-    // const durationRef = useRef<HTMLDivElement>(null)
-    // const confirmButtonRef = useRef<HTMLDivElement>(null)
+    const durationRef = useRef<HTMLDivElement>(null)
+    const confirmButtonRef = useRef<HTMLDivElement>(null)
 
     // These hooks are get available data from database
-    const [date, setDate] = useState<string>(todayToString)
+    const [date, setDate] = useState<Date | null>(todayToString)
     const [availableTime, setAvailableTime] = useState<string[]>([])
     const [availableCourts, setAvailableCourts] = useState<Facility[]>([])
     const [availableGameDurations, setAvailableGameDurations] = useState<number[]>([])
@@ -55,41 +59,58 @@ const BookingClient = () => {
     // Loading state
     const [error, setError] = useState<string | null>(null) // Error state
 
-
-    const smoothScrollTo = (ref: React.RefObject<HTMLDivElement>) => {
-        if (ref.current) {
-            ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
-        }
-    }
-
     useEffect(() => {
         const facilityNDateObj = {
-            selectedDate: date,
+            selectedDate: moment(date).format('YYYY-MM-DD'),
             facilityName: facilityName!
         } as AxiosRequestForFetchDataType
 
-            const getAvailableTime = async () => {
-                try {
-                    setLoading(true)
-                    setAvailableTime([])
-                    //axios parameter: selectedDate:string, facilityName:string
-                    const res = await axiosAvailableTime(facilityNDateObj)
-                    setAvailableTime(res.data.availableTime)
-                    clearState()
-                } catch (error) {
-                    setError('Failed to fetch available times')
-                } finally {
-                    setLoading(false)
-                }
+        const getAvailableTime = async () => {
+            try {
+                setLoading(true)
+                setAvailableTime([])
+                //axios parameter: selectedDate:string, facilityName:string
+                const res = await axiosAvailableTime(facilityNDateObj)
+                setAvailableTime(res.data.availableTime)
+                clearState()
+            } catch (error) {
+                setError('Failed to fetch available times. Please try to refresh your browser.')
+            } finally {
+                setLoading(false)
             }
-            getAvailableTime()
+        }
+        getAvailableTime()
     }, [date, facilityName])
 
-    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setDate(e.target.value)
+    const handleDateChange = (selectedDate: Date | null) => {
+        //setDate(e.target.value)
+        if (selectedDate) {
+            setDate(selectedDate) // Update state with the selected date
+            const formattedDate = moment(selectedDate).format('YYYY-MM-DD')
+            console.log('Selected date:', formattedDate) // Log formatted date
+        } else {
+            setDate(null)
+        }
         clearState()
     }
 
+    useEffect(() => {
+        if (availableCourts.length > 0) {
+            availableFacilityRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+    }, [availableCourts])
+
+    useEffect(() => {
+        if (availableGameDurations.length > 0) {
+            durationRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+    }, [availableGameDurations])
+
+    useEffect(() => {
+        if (duration !== 0) {
+            confirmButtonRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+    }, [duration])
 
     const handleBooking = () => {
         if (time !== '' && duration !== 0 && facilityId !== '') {
@@ -125,9 +146,8 @@ const BookingClient = () => {
         setDuration(0)
     }
 
-
     return (
-        <div className=" flex flex-col items-center px-4 mt-10">
+        <div className="flex flex-col items-center px-4 mt-10">
             <div className="w-full md:w-1/2 text-center mb-10 flex items-center justify-center">
                 {/* Left arrow for redirect */}
                 <Link to="/" className="mr-4 flex items-center">
@@ -142,14 +162,18 @@ const BookingClient = () => {
             </div>
             <div className="w-full md:w-1/2 rounded-lg mb-16">
                 <label className="block text-gray-700 text-md font-bold mb-2">Select Date</label>
-                <input
-                    type="date"
-                    value={date}
-                    onChange={handleDateChange}
-                    min={todayToString()} // Disable past dates
-                    max={count15DaysFromToday()} // Disable dates after 15 days
-                    className="shadow-md appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                />
+     
+                    <ReactDatePicker
+                       showIcon
+                        selected={date}
+                        onChange={handleDateChange}
+                        minDate={todayToString() as Date}
+                        maxDate={count15DaysFromToday() as Date}
+                        className="w-full shadow-md border rounded py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    wrapperClassName="w-full"
+                    icon={<SlCalender/>}
+                    />
+         
             </div>
             {error && <ErrorComp message={error} />} {/* Show error message if error */}
             {!loading && !error && availableTime.length === 0 && (
@@ -166,7 +190,7 @@ const BookingClient = () => {
                                 <TimeSlot
                                     key={index}
                                     timeSlot={timeSlot}
-                                    date={date}
+                                    date={date!}
                                     time={time}
                                     facilityName={facilityName}
                                     setFacilityId={setFacilityId}
@@ -175,14 +199,13 @@ const BookingClient = () => {
                                     setAvailableCourts={setAvailableCourts}
                                     setLoadingFacility={setLoadingFacility}
                                     setError={setError}
-                            
                                 />
                             ))}
                     </div>
                 )}
             </div>
             {availableCourts.length > 0 && (
-                <div className="w-full flex flex-col md:w-1/2 mb-16">
+                <div ref={availableFacilityRef} className="w-full flex flex-col md:w-1/2 mb-16">
                     <span className="block text-gray-700 text-md font-bold mb-2">Select Court</span>
                     {loadingFacility ? (
                         <Loading />
@@ -193,7 +216,7 @@ const BookingClient = () => {
                                     <AvailableFacility
                                         key={index}
                                         facility={court}
-                                        date={date}
+                                        date={date!}
                                         time={time}
                                         facilityName={facilityName}
                                         facilityId={facilityId}
@@ -209,8 +232,8 @@ const BookingClient = () => {
                 </div>
             )}
             {availableGameDurations.length > 0 && (
-                <div className="w-full flex flex-col md:w-1/2 mb-16">
-                    <span className="block text-gray-700 text-md font-bold mb-2">How long you want to play</span>
+                <div ref={durationRef} className="w-full flex flex-col md:w-1/2 mb-16">
+                    <span className="block text-gray-700 text-md font-bold mb-2">Booking Duration</span>
                     {loadingDuration ? (
                         <Loading />
                     ) : (
@@ -229,12 +252,17 @@ const BookingClient = () => {
                 </div>
             )}
             {time !== '' && facilityId !== '' && duration !== 0 && (
-                <div className="w-full flex flex-col md:w-1/2 mb-16">
+                <div ref={confirmButtonRef} className="w-full flex flex-col md:w-1/2 mb-16">
                     <button
                         className="bg-gradient-to-tl font-bold py-2 px-4 rounded shadow-md from-green-200 to-green-500 text-gray-800 hover:from-green-500 hover:to-green-200"
                         onClick={handleBooking}
                     >
-                        Confirm (<span className="text-red-500"> {(costPerHour * duration) / 60} </span> euros)
+                        Confirm (
+                        <span className="text-red-500">
+                            {' '}
+                            {Math.round((costPerHour * duration) / 60).toFixed(2)} EUR{' '}
+                        </span>
+                        )
                     </button>
                 </div>
             )}

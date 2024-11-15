@@ -12,7 +12,7 @@ export interface Booking {
     _id?: string
     user: UserForBookingFetchType;
     facility: FacilityForBookingFetchType;
-    date: string;
+    date: Date;
     startTime: string;
     endTime: string;
     duration: number;

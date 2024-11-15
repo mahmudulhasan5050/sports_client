@@ -79,3 +79,8 @@ export const axiosFetchUsers = async () => await customAxios.get('/user')
 export const axiosDeleteUser = async (userId: string) => await customAxios.delete(`/user/${userId}`)
 export const axiosUserById = async(userId: string)=> await customAxios.get(`/user/${userId}`)
 export const axiosEditUser = async(userId:string, userData: User) => customAxios.post(`/user/${userId}`, userData)
+
+
+//stripe
+export const axiosStripeCheckout = async() => await API.post('/checkout')
+export const axiosVerifyPayment = async(session_id: string) => await API.post('/checkout/verify-payment', {session_id})

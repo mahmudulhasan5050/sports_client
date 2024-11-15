@@ -4,10 +4,11 @@ import { axiosAvailableDuration } from '../../../axios'
 import { AxiosRequestForFetchDataType } from '../../../types/AxiosRequestForFetchData'
 import { firstLetterUpperCase } from '../../../utils/upperLowerConvert'
 import classNames from 'classnames'
+import moment from 'moment-timezone'
 
 type AvailableFacilityProps = {
     facility: Facility
-    date: string
+    date: Date
     facilityName: string
     time: string
     facilityId: string
@@ -16,7 +17,6 @@ type AvailableFacilityProps = {
     setAvailableGameDurations: (availableCourt: number[]) => void
     setLoadingDuration: (loading: boolean) => void
     setError: (error: string | null) => void
-    
 }
 
 const AvailableFacility = ({
@@ -42,7 +42,7 @@ const AvailableFacility = ({
             try {
                 setLoadingDuration(true)
                 const facilityNDateObj = {
-                    selectedDate: date,
+                    selectedDate: moment(date).format('YYYY-MM-DD'),
                     facilityName: facilityName!,
                     selectedTime: time,
                     selectedFacilityId: facilityId

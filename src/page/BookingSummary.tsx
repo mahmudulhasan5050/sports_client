@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useUser } from '../context/UserContext'
 import { useNavigate } from 'react-router-dom'
-import { axiosUserBookingCreate } from '../axios'
+import { axiosStripeCheckout, axiosUserBookingCreate } from '../axios'
 import toast from 'react-hot-toast'
 import { CreateBookingObjType } from './BookingClient'
+import moment from 'moment-timezone'
 
 const BookingSummary = () => {
     const bookingInfoStr = localStorage.getItem('booking')
@@ -37,6 +38,12 @@ const BookingSummary = () => {
     const paymentHandle = async () => {
         if (bookingInfo && userCTX) {
             try {
+                // const res = await axiosStripeCheckout()
+                // console.log("Payment::::: ",res.data)
+                // const {url} = res.data
+                // if(url){
+                //     window.location.href = url
+                // }
                 // Simulating payment success
                 bookingInfo.isPaid = true
 
@@ -58,7 +65,7 @@ const BookingSummary = () => {
                         <strong>Facility:</strong> {bookingInfo?.facilityName}
                     </p>
                     <p>
-                        <strong>Date:</strong> {bookingInfo?.date}
+                        <strong>Date:</strong> {bookingInfo && moment(bookingInfo.date).format('YYYY-MM-DD')}
                     </p>
                     <p>
                         <strong>Time:</strong>{' '}

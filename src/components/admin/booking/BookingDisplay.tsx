@@ -3,6 +3,7 @@ import { getMemberRoleMark } from '../../../utils/getBookingPaymentStatus'
 import { Booking } from '../../../types/Booking'
 import { axiosFetchBookings } from '../../../axios'
 import toast from 'react-hot-toast'
+import moment from 'moment-timezone'
 //import { format } from 'date-fns'
 
 type setRefreshType = {
@@ -61,7 +62,7 @@ const BookingDisplay = ({ refresh, setBookingId, setRefresh }: setRefreshType) =
                                     {booking.user.email}
                                 </td>
                                 <td>{booking.facility.type}-{booking.facility.courtNumber}</td>
-                                <td>{booking.date}</td>
+                                <td>{moment(booking.date).format('YYYY-MM-DD')}</td>
                                 {/* <td>{format(new Date(order.order_date), 'dd MMM yyyy')}</td> */}
                                 <td>{booking.startTime}</td>
                                 <td>{booking.paymentAmount}</td>

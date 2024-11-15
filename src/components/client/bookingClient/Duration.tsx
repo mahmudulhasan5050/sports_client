@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 
 
-type DurationProps = {
+export type DurationProps = {
     duration: number
     availableGameDuration: number
     setDuration: (duration: number) => void

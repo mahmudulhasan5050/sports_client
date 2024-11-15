@@ -25,6 +25,9 @@ import ForgotPassword from './page/ForgotPassword'
 import ResetPassword from './page/ResetPassword'
 import RefundMain from './page/admin/RefundMain'
 import GoogleAuthSuccess from './page/client/GoogleAuthSuccess'
+import Checkout from './page/client/Checkout'
+import PaymentError from './page/client/PaymentError'
+import PaymentSuccess from './page/client/PaymentSuccess'
 
 function App() {
     const location = useLocation()
@@ -47,6 +50,10 @@ function App() {
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/reset-password/:token" element={<ResetPassword />} />
                 <Route path="/google-auth-success/:token" element={<GoogleAuthSuccess />} />
+                
+                <Route path='/checkout' element={<Checkout/>}/>
+                <Route path='/payment-error' element={<PaymentError/>}/>
+                <Route path='/payment-success/:session_id' element={<PaymentSuccess/>}/>
                 {/* <Route path="/" element={<LayoutClient />}>
                     <Route path="booking-client/:facilityName" element={<BookingClient />} />
                     <Route path="booking-summary" element={<BookingSummary />} />

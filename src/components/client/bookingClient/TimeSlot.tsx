@@ -4,10 +4,11 @@ import classNames from 'classnames'
 import { axiosAvailableCourt } from '../../../axios'
 import { Facility } from '../../../types/Facility'
 import { AxiosRequestForFetchDataType } from '../../../types/AxiosRequestForFetchData'
+import moment from 'moment-timezone'
 
 type TimeSlotProps = {
     timeSlot: string
-    date: string
+    date: Date
     facilityName: string
     time: string
     setFacilityId: (facilityId: string) => void
@@ -16,7 +17,6 @@ type TimeSlotProps = {
     setAvailableCourts: (availableCourt: Facility[]) => void
     setLoadingFacility: (loading: boolean) => void
     setError: (error: string | null) => void
-
 }
 
 const TimeSlot = ({
@@ -37,11 +37,13 @@ const TimeSlot = ({
         setFacilityId('')
         setDuration(0)
     }, [time])
+
+    
     const handleTimeSlotClick = async (selectedTime: string) => {
         try {
             setLoadingFacility(true)
             const facilityNDateObj = {
-                selectedDate: date,
+                selectedDate: moment(date).format('YYYY-MM-DD'),
                 facilityName: facilityName!,
                 selectedTime: selectedTime
             } as AxiosRequestForFetchDataType

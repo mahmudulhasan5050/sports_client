@@ -20,7 +20,6 @@ export const getToken = () => {
   if (tokenObj) {
     token = JSON.parse(tokenObj);
   }
-  console.log("func token:::: ",token)
   return token ? token : null;
 };
 
