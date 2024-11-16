@@ -7,7 +7,7 @@ import ReactDatePicker from 'react-datepicker'
 import { SlCalender } from "react-icons/sl";
 import 'react-datepicker/dist/react-datepicker.css'
 
-import { todayToString, count15DaysFromToday, todayToString1, count15DaysFromToday1 } from '../utils/dates'
+import { todayToString, count15DaysFromToday } from '../utils/dates'
 import { axiosAvailableTime } from '../axios'
 import { Facility } from '../types/Facility'
 import { AxiosRequestForFetchDataType } from '../types/AxiosRequestForFetchData'
@@ -171,7 +171,7 @@ const BookingClient = () => {
                         maxDate={count15DaysFromToday() as Date}
                         className="w-full shadow-md border rounded py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     wrapperClassName="w-full"
-                    icon={<SlCalender/>}
+                    icon={<SlCalender className='items-end'/>}
                     />
          
             </div>

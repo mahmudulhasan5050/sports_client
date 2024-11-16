@@ -4,7 +4,6 @@ import toast from 'react-hot-toast'
 import { User } from '../../../types/User'
 import { AdminBookingCreateType, BookingCreateType } from '../../../types/Booking'
 import { Facility } from '../../../types/Facility'
-import moment from 'moment-timezone'
 
 type BookingCreateModalPropsType = {
     isOpen: boolean
@@ -100,8 +99,8 @@ console.log(formData)
                             type="date"
                             onChange={(e) => {
                                 const selectedDate = e.target.value
-                                if (!formData.dates.includes(moment(selectedDate).format('YYYY-MM-DD'))) {
-                                    setFormData({ ...formData, dates: [...formData.dates, moment(selectedDate).format('YYYY-MM-DD')] })
+                                if (!formData.dates.includes(selectedDate)) {
+                                    setFormData({ ...formData, dates: [...formData.dates, selectedDate] })
                                 }
                             }}
                             className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
