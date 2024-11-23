@@ -1,32 +1,28 @@
 import React, { useState } from 'react'
-import BookingDisplay from '../../components/admin/booking/BookingDisplay'
-import BookingForm from '../../components/admin/booking/BookingForm'
-import CalendarView from '../../components/admin/booking/CalendarView'
-import BookingCreateModal from '../../components/admin/booking/BookingCreateModal'
-import { Booking, BookingCreateType } from '../../types/Booking'
-import toast from 'react-hot-toast'
-import { axiosAdminCreateBooking } from '../../axios'
+import BookingDisplay from '../../components/admin/bookingTable/BookingDisplay'
+import BookingForm from '../../components/admin/bookingCalendar/BookingForm'
+import CalendarView from '../../components/admin/bookingCalendar/CalendarView'
+import BookingCreateModal from '../../components/admin/bookingCalendar/BookingCreateModal'
+import { Booking } from '../../types/Booking'
+import BookingInfoModal from '../../components/admin/bookingCalendar/BookingInfoModal'
 
 const BookingMain = () => {
     const [refresh, setRefresh] = useState(false)
     const [bookingId, setBookingId] = useState<string>('')
-    const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
+    const [isBookingInfoOpen, setIsBookingInfoOpen] = useState<boolean>(false)
+    const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null)
+    const [bookings, setBookings] = useState<Booking[]>([])
 
     const toggleHandle = () => {
         // setRefresh(!refresh)
-        setIsModalOpen(!isModalOpen)
+        setIsCreateModalOpen(!isCreateModalOpen)
     }
 
-    const handleCreateBooking = async (bookingData: BookingCreateType) => {
-        try {
-            const res = await axiosAdminCreateBooking(bookingData)
-    
-            if (res.data) toast.success('Booking is confirmed!')
-        } catch (error) {
-            toast.error('Booking creation failed')
-        }
-
-        setRefresh(true)
+    const updateBookingsStatus = (updatedBooking: Booking) => {
+        setBookings((allBooking) =>
+            allBooking.map((booking) => (booking._id === updatedBooking._id ? updatedBooking : booking))
+        )
     }
 
     return (
@@ -43,7 +39,15 @@ const BookingMain = () => {
                         </button>
                     </div>
 
-                    <CalendarView refresh={refresh} setRefresh={setRefresh} setBookingId={setBookingId} />
+                    <CalendarView
+                        bookings={bookings}
+                        setBookings={setBookings}
+                        refresh={refresh}
+                        setRefresh={setRefresh}
+                        setBookingId={setBookingId}
+                        setSelectedBooking={setSelectedBooking}
+                        setIsBookingInfoOpen={setIsBookingInfoOpen}
+                    />
                 </div>
             </div>
             {/* <div className="flex flex-row w-full">
@@ -53,9 +57,21 @@ const BookingMain = () => {
                     <BookingForm bookingId={bookingId} setBookingId={setBookingId} setRefresh={setRefresh} />
                 )}
             </div> */}
-            <BookingCreateModal isOpen={isModalOpen} onClose={toggleHandle} onSubmit={handleCreateBooking} />
+            <BookingCreateModal isCreateModalOpen={isCreateModalOpen} setRefresh={setRefresh} onClose={toggleHandle} />
+            {selectedBooking && isBookingInfoOpen && (
+                <BookingInfoModal
+                    selectedBooking={selectedBooking}
+                    setSelectedBooking={setSelectedBooking}
+                    setIsBookingInfoOpen={setIsBookingInfoOpen}
+                    refresh={refresh}
+                    setRefresh={setRefresh}
+                    updateBookingsStatus={updateBookingsStatus}
+                />
+            )}
         </div>
     )
 }
 
 export default BookingMain
+
+//onSubmit={handleCreateBooking}

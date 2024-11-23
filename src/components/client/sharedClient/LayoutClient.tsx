@@ -1,6 +1,7 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import HeaderClient from '../sharedClient/HeaderClient'
+import Footer from './Footer'
 
 
 const LayoutClient = () => {
@@ -9,6 +10,7 @@ const LayoutClient = () => {
             <div className="flex-1">
                 <HeaderClient />
                 <Outlet />
+                <Footer/>
             </div>
         </div>
     )

@@ -5,6 +5,7 @@ import { axiosCancelBookingByUser, axiosFetchBookingsByUser } from '../../../axi
 import { Facility } from '../../../types/Facility'
 import toast from 'react-hot-toast'
 import { calculateTimeDifference } from '../../../utils/timeDifference'
+import { userConfirmed } from '../../../utils/cancelToastMessage'
 
 interface OwnBooking {
     _id: string
@@ -37,15 +38,21 @@ const OwnScheduleModal = ({ isOpen, onClose }: PropsType) => {
         fetchUserBookingData()
     }, [isOpen, userCTX])
 
-    const handleCancel = async(bookingId: string) => {
-        try {
-           await axiosCancelBookingByUser(bookingId)
+    const handleCancel = async (bookingId: string) => {
+        //This is toast message to confirm cancellation
+        const aaa = await userConfirmed()
 
-            setBookings(bookings.filter(booking => booking._id !== bookingId))
-            toast.success('Your booking is cancelled.')
-        
-        } catch (error) {
-            toast.error('Can not be cancelled. ')
+        if (aaa) {
+            try {
+                await axiosCancelBookingByUser(bookingId)
+
+                setBookings(bookings.filter((booking) => booking._id !== bookingId))
+                toast.success('Your booking is cancelled.', { duration: 3000 })
+            } catch (error) {
+                toast.error('Can not be cancelled. ', { duration: 3000 })
+            }
+        } else {
+            return
         }
     }
 
@@ -64,7 +71,8 @@ const OwnScheduleModal = ({ isOpen, onClose }: PropsType) => {
                                     <strong>Date:</strong> {new Date(booking.date).toLocaleDateString()}
                                 </p>
                                 <p>
-                                    <strong>Time:</strong> {booking.startTime.slice(0, 2) + ':' + booking.startTime.slice(2)}
+                                    <strong>Time:</strong>{' '}
+                                    {booking.startTime.slice(0, 2) + ':' + booking.startTime.slice(2)}
                                 </p>
                                 <p>
                                     <strong>Duration:</strong> {booking.duration} hour(s)
@@ -72,9 +80,10 @@ const OwnScheduleModal = ({ isOpen, onClose }: PropsType) => {
                                 <button
                                     onClick={() => handleCancel(booking._id)} // Or another unique identifier
                                     className="mt-4 w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-700"
-                     
                                 >
-                                 {calculateTimeDifference(booking.date, booking.startTime) ? 'Cancellation is not passible' : 'Cancel'}
+                                    {calculateTimeDifference(booking.date, booking.startTime)
+                                        ? 'Cancellation is not passible'
+                                        : 'Cancel'}
                                 </button>
                             </li>
                         ))}

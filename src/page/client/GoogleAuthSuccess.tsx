@@ -6,13 +6,12 @@ import Loading from '../../components/client/Loading'
 
 const GoogleAuthSuccess = () => {
     const { token } = useParams()
-    const { setUserCTX } = useUser()
+    const { userCTX, setUserCTX } = useUser()
     const navigate = useNavigate()
 
     useEffect(() => {
         if (token) {
             const decodedURIToken = decodeURIComponent(token)
-            console.log(typeof decodedURIToken)
             saveToken(decodedURIToken)
             const userFromToken = tokenDecodeFunc(decodedURIToken)
             setUserCTX({
@@ -20,6 +19,7 @@ const GoogleAuthSuccess = () => {
                 role: userFromToken.role
             })
             const localStorageBooking = localStorage.getItem('booking')
+
             // When user is signin during booking process or user login other situation
             if (localStorageBooking) {
                 navigate('/booking-summary')
@@ -29,9 +29,11 @@ const GoogleAuthSuccess = () => {
         }
     }, [navigate])
 
-    return <div>
-        <Loading/>
-    </div>
+    return (
+        <div>
+            <Loading />
+        </div>
+    )
 }
 
 export default GoogleAuthSuccess

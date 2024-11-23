@@ -43,9 +43,15 @@ export const DASHBOARD_SIDEBAR_LINKS = [
 		icon: <FaUser />
 	},
 	{
-		key: 'bookings',
-		label: 'Bookings',
-		path: '/admin/booking',
+		key: 'bookingCalender',
+		label: 'Bookings Calendar',
+		path: '/admin/booking-calendar',
+		icon: <MdOutlineBookmark />
+	},
+	{
+		key: 'bookingTable',
+		label: 'Booking Table',
+		path: '/admin/booking-table',
 		icon: <MdOutlineBookmark />
 	},
 	{

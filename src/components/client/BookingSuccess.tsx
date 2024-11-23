@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 const BookingSuccess = () => {
     const navigate = useNavigate()
     return (
-        <div className="min-h-screen w-screen flex justify-center">
+        <div className="w-screen flex justify-center">
             <div className="bg-white flex flex-col w-full px-4 md:w-1/2 text-center mt-48">
                 <h2 className="text-2xl font-bold mb-4">Your Booking is confirmed!!!</h2>
                 <p>

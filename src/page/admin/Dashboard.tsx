@@ -1,7 +1,7 @@
 import React from 'react'
 import DashboardStartGrid from '../../components/admin/dashboard/DashboardStartGrid'
 import TransactionChart from '../../components/admin/dashboard/TransactionChart'
-import BookingDisplay from '../../components/admin/booking/BookingDisplay'
+import BookingDisplay from '../../components/admin/bookingTable/BookingDisplay'
 
 const Dashboard = () => {
     return (
@@ -11,9 +11,7 @@ const Dashboard = () => {
                 <TransactionChart />
                 {/* <BuyerProfileChart/> */}
             </div>
-            <div className="flex flex-row gap-4 w-full">
-                {/* <BookingDisplay /> */}
-            </div>
+            <div className="flex flex-row gap-4 w-full">{/* <BookingDisplay /> */}</div>
         </div>
     )
 }

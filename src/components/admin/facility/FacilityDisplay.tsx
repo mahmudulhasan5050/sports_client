@@ -4,6 +4,7 @@ import toast from 'react-hot-toast'
 import { firstLetterUpperCase } from '../../../utils/upperLowerConvert'
 import { Facility } from '../../../types/Facility'
 import { axiosFetchFacility, axiosDeleteFacility } from '../../../axios'
+import { FaEdit } from 'react-icons/fa'
 
 type SetRefreshType = {
     refresh: boolean
@@ -41,7 +42,7 @@ const FacilityUnitDisplay = ({ refresh, setFacilityId, setRefresh }: SetRefreshT
     }
 
     return (
-        <div className="bg-white p-4 rounded-sm border border-gray-200 flex flex-col flex-1">
+        <div className="bg-white p-2 rounded-sm border border-gray-200 flex flex-col flex-1">
             <strong className="text-gray-700 font-bold text-center">Facility Details</strong>
 
             <div className="border-x border-gray-200 rounded-sm mt-3">
@@ -75,7 +76,7 @@ const FacilityUnitDisplay = ({ refresh, setFacilityId, setRefresh }: SetRefreshT
                                                 }}
                                                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded focus:outline-none focus:shadow-outline"
                                             >
-                                                Edit
+                                                  <FaEdit/>
                                             </button>
                                             <button
                                                 onClick={() => unit._id && handleDelete(unit._id)}

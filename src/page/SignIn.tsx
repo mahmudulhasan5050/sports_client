@@ -16,7 +16,7 @@ const SignIn = () => {
 
     const [error, setError] = useState<string | null>(null)
     const navigate = useNavigate()
-    const { setUserCTX } = useUser()
+    const { userCTX ,setUserCTX } = useUser()
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target
@@ -35,17 +35,20 @@ const SignIn = () => {
                     name: userFromToken.name,
                     role: userFromToken.role
                 })
-                const localStorageBooking = localStorage.getItem('booking')
-                // When user is signin during booking process or user login other situation
-                if (localStorageBooking) {
-                    navigate('/booking-summary')
-                } else {
-                    navigate('/')
-                }
             }
         } catch (err) {
             // Handle error
             setError('Invalid credentials. Please try again.')
+        }finally{
+            userCTX && userCTX.role === 'admin' && navigate('/admin')
+            const localStorageBooking = localStorage.getItem('booking')
+
+            // When user is signin during booking process or user login other situation
+            if (localStorageBooking) {
+                navigate('/booking-summary')
+            } else {
+                navigate('/')
+            }
         }
     }
 
@@ -54,8 +57,8 @@ const SignIn = () => {
     }
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <div className="w-full max-w-md p-8 space-y-4 bg-white shadow-lg rounded-lg">
+        <div className="flex items-center justify-center bg-white">
+            <div className="w-full max-w-md p-8 space-y-4 mt-32 md:mt-40 shadow-lg rounded-lg">
                 {/* Google Sign-In Button */}
                 <button
                     onClick={handleGoogleSignin}

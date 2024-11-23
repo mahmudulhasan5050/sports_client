@@ -13,7 +13,6 @@ export const HeaderClient = () => {
     useEffect(() => {
 const getTokenFromCookies = getToken()
         const token = getTokenFromCookies && tokenDecodeFunc(getTokenFromCookies)
-        console.log("header token::::: ",token)
         if (token) {
             setUserCTX({ name: token.name, role: token.role })
         }
@@ -27,7 +26,7 @@ const getTokenFromCookies = getToken()
     }
 
     return (
-        <header className="mx-auto flex w-full max-w-7xl items-center justify-between p-4 bg-white ">
+        <header className="mx-auto flex w-full max-w-7xl items-center justify-between p-4 md:p-0 bg-white ">
             {/* Tennis Center Title */}
             <Link to="/" style={{ textDecoration: 'none' }}>
                 <h1 className="text-2xl md:text-4xl font-extrabold text-gray-800 tracking-tight">

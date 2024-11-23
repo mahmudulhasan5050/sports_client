@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
+import { FaEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 
 import { firstLetterUpperCase } from '../../../utils/upperLowerConvert'
 import { OpeningHour } from '../../../types/OpeningHour'
@@ -41,7 +43,7 @@ const OpeningHourDisplay = ({ refresh, setOpeningHourtId, setRefresh }: setRefre
     }
 
     return (
-        <div className="bg-white p-4 rounded-sm border border-gray-200 flex flex-col flex-1">
+        <div className="bg-white p-2 rounded-sm border border-gray-200 flex flex-col flex-1">
             <strong className="text-gray-700 font-bold text-center">Opening Hours</strong>
             <div className="border-x border-gray-200 rounded-sm mt-3">
                 {openingHour.length === 0 ? (
@@ -70,13 +72,13 @@ const OpeningHourDisplay = ({ refresh, setOpeningHourtId, setRefresh }: setRefre
                                                 }}
                                                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded focus:outline-none focus:shadow-outline"
                                             >
-                                                Edit
+                                                <FaEdit/>
                                             </button>
                                             <button
                                                 onClick={() => unit._id && handleDelete(unit._id)}
                                                 className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded focus:outline-none focus:shadow-outline"
                                             >
-                                                Delete
+                                                <MdDelete/>
                                             </button>
                                         </div>
                                     </td>

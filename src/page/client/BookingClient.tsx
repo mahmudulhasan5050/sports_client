@@ -2,23 +2,22 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { FaArrowLeft } from 'react-icons/fa'
-import { Link } from 'react-router-dom'
 import ReactDatePicker from 'react-datepicker'
-import { SlCalender } from "react-icons/sl";
+import { SlCalender } from 'react-icons/sl'
 import 'react-datepicker/dist/react-datepicker.css'
 
-import { todayToString, count15DaysFromToday } from '../utils/dates'
-import { axiosAvailableTime } from '../axios'
-import { Facility } from '../types/Facility'
-import { AxiosRequestForFetchDataType } from '../types/AxiosRequestForFetchData'
-import { useUser } from '../context/UserContext'
+import { todayToString, count15DaysFromToday } from '../../utils/dates'
+import { axiosAvailableTime } from '../../axios'
+import { Facility } from '../../types/Facility'
+import { AxiosRequestForFetchDataType } from '../../types/AxiosRequestForFetchData'
+import { useUser } from '../../context/UserContext'
 
-import Loading from '../components/client/Loading'
-import ErrorComp from '../components/client/ErrorComp'
-import TimeSlot from '../components/client/bookingClient/TimeSlot'
-import AvailableFacility from '../components/client/bookingClient/AvailableFacility'
-import Duration from '../components/client/bookingClient/Duration'
-import { allUpperCase } from '../utils/upperLowerConvert'
+import Loading from '../../components/client/Loading'
+import ErrorComp from '../../components/client/ErrorComp'
+import TimeSlot from '../../components/client/bookingClient/TimeSlot'
+import AvailableFacility from '../../components/client/bookingClient/AvailableFacility'
+import Duration from '../../components/client/bookingClient/Duration'
+import { allUpperCase } from '../../utils/upperLowerConvert'
 import moment from 'moment-timezone'
 
 export interface CreateBookingObjType {
@@ -29,6 +28,7 @@ export interface CreateBookingObjType {
     facilityId: string
     paymentAmount: number
     isPaid: boolean
+    paymentAtCounter: boolean
 }
 
 const BookingClient = () => {
@@ -83,11 +83,8 @@ const BookingClient = () => {
     }, [date, facilityName])
 
     const handleDateChange = (selectedDate: Date | null) => {
-        //setDate(e.target.value)
         if (selectedDate) {
-            setDate(selectedDate) // Update state with the selected date
-            const formattedDate = moment(selectedDate).format('YYYY-MM-DD')
-            console.log('Selected date:', formattedDate) // Log formatted date
+            setDate(selectedDate)
         } else {
             setDate(null)
         }
@@ -138,6 +135,11 @@ const BookingClient = () => {
         }
     }
 
+    const handleBackButton = () => {
+        clearState()
+        navigate(`/`)
+    }
+
     const clearState = () => {
         setAvailableCourts([])
         setAvailableGameDurations([])
@@ -149,31 +151,30 @@ const BookingClient = () => {
     return (
         <div className="flex flex-col items-center px-4 mt-10">
             <div className="w-full md:w-1/2 text-center mb-10 flex items-center justify-center">
-                {/* Left arrow for redirect */}
-                <Link to="/" className="mr-4 flex items-center">
-                    <FaArrowLeft className="text-gray-700 text-2xl hover:text-blue-500 transition duration-300" />
-                </Link>
+                <FaArrowLeft
+                    className="text-gray-700 text-2xl hover:text-blue-500 transition duration-300 cursor-pointer"
+                    onClick={handleBackButton}
+                />
 
                 {/* Title with dynamic horizontal line */}
-                <h1 className="text-3xl md:text-4xl font-bold text-gray-700 mb-2 inline-block relative">
+                <h1 className="text-3xl font-bold text-gray-800 text-center w-full">
                     {allUpperCase(facilityName!)}
-                    <span className="block h-2 bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 mt-2 rounded-md"></span>
+                    <span className="block h-1 mt-2 bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 rounded"></span>
                 </h1>
             </div>
             <div className="w-full md:w-1/2 rounded-lg mb-16">
                 <label className="block text-gray-700 text-md font-bold mb-2">Select Date</label>
-     
-                    <ReactDatePicker
-                       showIcon
-                        selected={date}
-                        onChange={handleDateChange}
-                        minDate={todayToString() as Date}
-                        maxDate={count15DaysFromToday() as Date}
-                        className="w-full shadow-md border rounded py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+
+                <ReactDatePicker
+                    showIcon
+                    selected={date}
+                    onChange={handleDateChange}
+                    minDate={todayToString() as Date}
+                    maxDate={count15DaysFromToday() as Date}
+                    className="w-full shadow-md border rounded py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     wrapperClassName="w-full"
-                    icon={<SlCalender className='items-end'/>}
-                    />
-         
+                    icon={<SlCalender className="items-end" />}
+                />
             </div>
             {error && <ErrorComp message={error} />} {/* Show error message if error */}
             {!loading && !error && availableTime.length === 0 && (
@@ -182,7 +183,9 @@ const BookingClient = () => {
             <div className="w-full flex flex-col md:w-1/2 mb-16">
                 <span className="block text-gray-700 text-md font-bold mb-2">Select Time</span>
                 {loading ? (
-                    <Loading />
+                    <div className="w-[90%] flex items-center justify-center h-10 mb-auto">
+                        <Loading />
+                    </div>
                 ) : (
                     <div className="grid grid-cols-4 md:grid-cols-6 gap-4">
                         {facilityName &&
@@ -237,7 +240,7 @@ const BookingClient = () => {
                     {loadingDuration ? (
                         <Loading />
                     ) : (
-                        <div className="flex justify-between w-full gap-4">
+                        <div className="flex justify-evenly w-full gap-4">
                             {availableGameDurations.map((availableGameDuration) => (
                                 <Duration
                                     key={availableGameDuration}

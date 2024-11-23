@@ -5,32 +5,29 @@ import { Booking } from '../../../types/Booking'
 import moment from 'moment-timezone'
 import { Facility } from '../../../types/Facility'
 import { firstLetterUpperCase } from '../../../utils/upperLowerConvert'
+import { generateTimeSlots } from '../../../utils/generateTimeSlot'
 
 type CalendarViewProps = {
+    bookings: Booking[] 
+    setBookings: (booking: Booking[])=> void
     refresh: boolean
     setBookingId: (value: string) => void
     setRefresh: (value: boolean) => void
+    setSelectedBooking: (value: Booking) => void
+    setIsBookingInfoOpen: (value: boolean) => void
 }
 
-const CalendarView: React.FC<CalendarViewProps> = ({ refresh, setBookingId, setRefresh }) => {
-    const [bookings, setBookings] = useState<Booking[]>([])
+const CalendarView = ({
+    bookings,
+    setBookings,
+    refresh,
+    setBookingId,
+    setRefresh,
+    setSelectedBooking,
+    setIsBookingInfoOpen
+}: CalendarViewProps) => {
     const [allFacility, setAllFacility] = useState<Facility[]>([])
     const [selectedDate, setSelectedDate] = useState(moment())
-
-
-    // Function to generate time slots dynamically with 30-minute intervals
-    const generateTimeSlots = () => {
-        const startOfDay = moment().startOf('day').add(8, 'hours') // Start at 08:00 AM
-        const endOfDay = moment().startOf('day').add(23, 'hours') // End at 08:00 PM
-        const timeSlots = []
-
-        let current = startOfDay
-        while (current.isBefore(endOfDay)) {
-            timeSlots.push(current.format('HH:mm'))
-            current = current.add(30, 'minutes') // Add 30-minute interval
-        }
-        return timeSlots
-    }
 
     const timeSlots = generateTimeSlots()
 
@@ -39,6 +36,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ refresh, setBookingId, setR
             const formattedDate = date.format('YYYY-MM-DD')
             //API
             const fetchedBookingsByDate = await axiosGetBookingByDate(formattedDate)
+            setBookings(fetchedBookingsByDate.data)
             setBookings(fetchedBookingsByDate.data)
             const fetchedFacilities = await axiosFetchFacility()
             // Sort by facility type and court number
@@ -50,11 +48,10 @@ const CalendarView: React.FC<CalendarViewProps> = ({ refresh, setBookingId, setR
             setAllFacility(sortedFacilities)
             setBookingId('')
         } catch (error) {
-
             toast.error('Bookings are not available')
         }
     }
- 
+
     useEffect(() => {
         fetchBookings(selectedDate)
     }, [selectedDate])
@@ -67,12 +64,18 @@ const CalendarView: React.FC<CalendarViewProps> = ({ refresh, setBookingId, setR
             setSelectedDate((prev) => prev.clone().add(1, 'days')) // Move forward one day
         }
     }
-    // Create a helper function to check if a booking overlaps with a time slot
+    // check if a booking overlaps with a time slot
     const isBookingWithinTimeSlot = (booking: Booking, time: string) => {
         const bookingStart = moment(booking.startTime, 'HHmm')
         const bookingEnd = moment(booking.endTime, 'HHmm')
         const slotTime = moment(time, 'HH:mm')
         return slotTime.isBetween(bookingStart, bookingEnd, 'minute', '[)')
+    }
+
+    //When admin wants to see specific booking
+    const handleBookingClick = (booking: Booking) => {
+        setSelectedBooking(booking)
+        setIsBookingInfoOpen(true)
     }
     // Function to render bookings based on time slot and court
     const renderBooking = (court: Facility, time: string) => {
@@ -93,20 +96,25 @@ const CalendarView: React.FC<CalendarViewProps> = ({ refresh, setBookingId, setR
         const durationInMinutes = endMoment.diff(startMoment, 'minutes')
         const slotsToSpan = Math.ceil(durationInMinutes / 30) // Calculate how many 30-minute slots to span
 
-        // Render the booking cell with rowSpan
         return (
-            <td key={`${court._id}-${time}`} className="border-4 border-sky-300 bg-green-200" rowSpan={slotsToSpan}>
+            <td
+                key={`${court._id}-${time}`}
+                className="border-4 border-sky-300 bg-green-200 h-[35px] w-[35px]"
+                rowSpan={slotsToSpan}
+                onClick={() => handleBookingClick(booking)}
+            >
                 <div className="rounded">
-                    <p>{firstLetterUpperCase(booking.user.role)}</p>
+                    <p className="text-xs">{firstLetterUpperCase(booking.user.name)}</p>
 
                     <p>{booking.isPaid ? 'Paid' : 'Unpaid'}</p>
-
                 </div>
             </td>
         )
     }
+
+
     return (
-            <>
+        <>
             {/* Date Display with Left and Right Arrows */}
             <div className="flex items-center justify-center mb-4">
                 <button
@@ -137,8 +145,8 @@ const CalendarView: React.FC<CalendarViewProps> = ({ refresh, setBookingId, setR
                     </thead>
                     <tbody>
                         {timeSlots.map((timeSlot, rowIndex) => (
-                            <tr key={rowIndex} className="relative">
-                                <td className="border p-2 text-center">{timeSlot}</td>
+                            <tr key={rowIndex} className="relative ">
+                                <td className="border p-2 text-center h-[35px] w-[35px]">{timeSlot}</td>
                                 {allFacility.map((court, index) => {
                                     const booking = bookings.find(
                                         (b) =>
@@ -152,7 +160,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ refresh, setBookingId, setR
                                             {booking ? (
                                                 renderBooking(court, timeSlot)
                                             ) : (
-                                                <td className="border p-2 h-[50px]"></td>
+                                                <td className="border p-2 h-[35px] w-[35px]"></td>
                                             )}
                                         </React.Fragment>
                                     )
@@ -162,7 +170,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ refresh, setBookingId, setR
                     </tbody>
                 </table>
             </div>
-   </>
+        </>
     )
 }
 

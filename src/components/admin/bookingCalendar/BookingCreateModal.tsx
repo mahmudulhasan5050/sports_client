@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react'
-import { axiosFetchFacility, axiosFetchUsers } from '../../../axios'
+import { axiosAdminCreateBooking, axiosFetchFacility, axiosFetchUsers } from '../../../axios'
 import toast from 'react-hot-toast'
 import { User } from '../../../types/User'
 import { AdminBookingCreateType, BookingCreateType } from '../../../types/Booking'
 import { Facility } from '../../../types/Facility'
 
 type BookingCreateModalPropsType = {
-    isOpen: boolean
+    isCreateModalOpen: boolean
     onClose: () => void
-    onSubmit: (bookingData: BookingCreateType) => void
+    setRefresh: (refresh:boolean)=>void
+    //onSubmit: (bookingData: BookingCreateType) => void
 }
 
-const BookingCreateModal = ({ isOpen, onClose, onSubmit }: BookingCreateModalPropsType) => {
+const BookingCreateModal = ({ isCreateModalOpen, onClose, setRefresh }: BookingCreateModalPropsType) => {
     const [formData, setFormData] = useState<AdminBookingCreateType>({
         email: '',
         facilityId: '',
@@ -27,10 +28,10 @@ const BookingCreateModal = ({ isOpen, onClose, onSubmit }: BookingCreateModalPro
 
     useEffect(() => {
         fetchUser()
-    }, [isOpen])
+    }, [isCreateModalOpen])
 
     const fetchUser = async () => {
-        if (isOpen) {
+        if (isCreateModalOpen) {
             try {
                 const resUser = await axiosFetchUsers()
                 resUser && setUsers(resUser.data)
@@ -60,10 +61,18 @@ const BookingCreateModal = ({ isOpen, onClose, onSubmit }: BookingCreateModalPro
         e.preventDefault();
         if (formData.email !== '' && formData.facilityId && formData.dates.length > 0) {
             // Create a booking for each selected date
-            formData.dates.forEach(date => {
+            formData.dates.forEach(async(date) => {
                 const bookingData = { ...formData, date };
-                onSubmit(bookingData); // Submit each booking
+               // onSubmit(bookingData); // Submit each booking
+                try {
+                    const res = await axiosAdminCreateBooking(bookingData)
+    
+                    if (res.data) toast.success('Booking is confirmed!')
+                } catch (error) {
+                    toast.error('Booking creation failed')
+                }
             });
+            setRefresh(true)
             onClose();
         } else {
             toast.error("Please select all required fields and at least one date");
@@ -79,9 +88,9 @@ const BookingCreateModal = ({ isOpen, onClose, onSubmit }: BookingCreateModalPro
             duration: 0 
         })
     }
-console.log(formData)
+
     return (
-        <div className={`fixed inset-0 z-50 ${isOpen ? 'block' : 'hidden'}`}>
+        <div className={`fixed inset-0 z-50 ${isCreateModalOpen ? 'block' : 'hidden'}`}>
             <div className="absolute inset-0 bg-gray-900 opacity-50"></div>
             <div className="absolute right-0 w-full sm:w-1/3 h-full bg-white p-4 shadow-lg overflow-y-auto">
                 <div className="flex justify-between items-center mb-4">

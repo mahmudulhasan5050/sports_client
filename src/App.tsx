@@ -3,9 +3,10 @@ import './index.css'
 import { Routes, Route, useLocation } from 'react-router-dom'
 
 import { UserProvider } from './context/UserContext'
-import Home from './page/Home'
+import ScrollToTop from './components/client/sharedClient/ScrollToTop'
+import Home from './page/client/Home'
 import HeaderClient from './components/client/sharedClient/HeaderClient'
-import BookingClient from './page/BookingClient'
+import BookingClient from './page/client/BookingClient'
 import FacilityUnitMain from './page/admin/FacilityUnitMain'
 import FacilityMain from './page/admin/FacilityMain'
 import OpeningHourMain from './page/admin/OpeningHourMain'
@@ -16,7 +17,7 @@ import SignIn from './page/SignIn'
 import CheckYourEmail from './components/client/CheckYourEmail'
 import BookingMain from './page/admin/BookingMain'
 //import BookingConfirm from './page/BookingSummary'
-import BookingSummary from './page/BookingSummary'
+import BookingSummary from './page/client/BookingSummary'
 import LayoutAdmin from './components/admin/sharedAdmin/LayoutAdmin'
 import Dashboard from './page/admin/Dashboard'
 import LayoutClient from './components/client/sharedClient/LayoutClient'
@@ -25,17 +26,20 @@ import ForgotPassword from './page/ForgotPassword'
 import ResetPassword from './page/ResetPassword'
 import RefundMain from './page/admin/RefundMain'
 import GoogleAuthSuccess from './page/client/GoogleAuthSuccess'
-import Checkout from './page/client/Checkout'
 import PaymentError from './page/client/PaymentError'
 import PaymentSuccess from './page/client/PaymentSuccess'
+import BookingDisplay from './components/admin/bookingTable/BookingDisplay'
+import Footer from './components/client/sharedClient/Footer'
 
 function App() {
     const location = useLocation()
     const isAdminRoute = location.pathname.startsWith('/admin')
     return (
         <UserProvider>
+            <div className="flex flex-col min-h-screen">
             {!isAdminRoute && <HeaderClient />}
-
+            <ScrollToTop />
+            <main className="flex-grow">
             <Routes>
                 {/* Booking operation pages */}
                 <Route path="/" element={<Home />} />
@@ -50,10 +54,9 @@ function App() {
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/reset-password/:token" element={<ResetPassword />} />
                 <Route path="/google-auth-success/:token" element={<GoogleAuthSuccess />} />
-                
-                <Route path='/checkout' element={<Checkout/>}/>
-                <Route path='/payment-error' element={<PaymentError/>}/>
-                <Route path='/payment-success/:session_id' element={<PaymentSuccess/>}/>
+
+                <Route path="/payment-error" element={<PaymentError />} />
+                <Route path="/payment-success/:session_id" element={<PaymentSuccess />} />
                 {/* <Route path="/" element={<LayoutClient />}>
                     <Route path="booking-client/:facilityName" element={<BookingClient />} />
                     <Route path="booking-summary" element={<BookingSummary />} />
@@ -66,11 +69,15 @@ function App() {
                     <Route path="facilityunit" element={<FacilityUnitMain />} />
                     <Route path="facility" element={<FacilityMain />} />
                     <Route path="openinghour" element={<OpeningHourMain />} />
-                    <Route path="booking" element={<BookingMain />} />
+                    <Route path="booking-table" element={<BookingDisplay />} />
+                    <Route path="booking-calendar" element={<BookingMain />} />
                     <Route path="user" element={<UserMain />} />
                     <Route path="refund" element={<RefundMain />} />
                 </Route>
             </Routes>
+            </main>
+            {!isAdminRoute && <Footer />}
+            </div>
         </UserProvider>
     )
 }

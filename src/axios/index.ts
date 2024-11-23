@@ -5,8 +5,8 @@ import { Facility } from '../types/Facility'
 import { OpeningHour } from '../types/OpeningHour'
 import { User, SignInType } from '../types/User'
 import { AxiosRequestForFetchDataType } from '../types/AxiosRequestForFetchData'
-import { BookingCreateType } from '../types/Booking'
-import { CreateBookingObjType } from '../page/BookingClient'
+import { Booking, BookingCreateType } from '../types/Booking'
+import { CreateBookingObjType } from '../page/client/BookingClient'
 
 
 //auth
@@ -62,7 +62,7 @@ export const axiosUpdateOpeningHour = async (openingHourtId: string, editOpening
     customAxios.post(`/openinghour/${openingHourtId}`, editOpeningHour)
 export const axiosCreateOpeningHour = async (newOpeningHour: OpeningHour) => customAxios.post('/openinghour', newOpeningHour)
 
-//booking CRUD
+//booking admin
 export const axiosFetchBookings = async () => await customAxios.get('/booking')
 // export const axiosFetchBookingById = async(bookingId:string)=>
 //     await API.get(`/booking/${bookingId}`) // This is for Edit booking
@@ -73,7 +73,7 @@ export const axiosGetBookingByDate = async(date: string) =>
     await customAxios.get(`/booking/booking-by-date/${date}`)
 export const axiosFetchBookingForRefund = async()=> await customAxios.get('/booking/refund')
 export const updateBookingAfterRefund_A = async(bookingId: string)=> await customAxios.post(`/booking/refund/${bookingId}`)
-
+export const axiosUpdateBookingStatus = async(bookingId: string, bookingObj: Booking)=> await customAxios.post(`/booking/update/${bookingId}`, bookingObj)
 // users
 export const axiosFetchUsers = async () => await customAxios.get('/user')
 export const axiosDeleteUser = async (userId: string) => await customAxios.delete(`/user/${userId}`)
