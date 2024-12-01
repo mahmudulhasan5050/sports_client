@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { firstLetterUpperCase } from '../../utils/upperLowerConvert'
 import { axiosFetchFacilityUnits } from '../../axios/index'
 import { useUser } from '../../context/UserContext'
-import heroImage from '../../assets/hero1.svg'
+import heroImage from '../../assets/home2.jpg'
 import homePic from '../../assets/2.jpg'
 
 const Home = () => {
@@ -61,18 +61,24 @@ const Home = () => {
         // </div>
 
         <div className=" bg-white flex flex-col md:flex-row md:ml-6 overflow-hidden items-center justify-center">
-            <div className="md:w-1/2 w-full">
-                <img src={homePic} alt="Hero" className="w-full h-full object-cover object-top rounded mt-10" />
+            <div className="hidden md:block md:w-1/2 w-full">
+                <img src={homePic} alt="Hero" className="w-full h-full object-cover object-top rounded mt-0 md:mt-10" />
+            </div>
+            <div className="block md:hidden md:w-1/2 w-full">
+                <img
+                    src={heroImage}
+                    alt="Hero"
+                    className="w-full h-full object-cover object-top rounded mt-0 md:mt-10"
+                />
             </div>
 
             <div className="md:w-1/2 w-full mt-14 md:mt-0">
                 <div className="flex flex-col justify-center items-center p-8 md:p-0">
-                    {/* Text Section */}
                     <div className="text-center flex flex-col mt-7 md:mt-32">
                         <h1 className="text-4xl md:text-6xl font-bold text-gray-700 mb-4">Let's Play Today</h1>
                         <p className="text-lg md:text-xl text-gray-600 mb-8">Choose your sport to start booking.</p>
                     </div>
-                    {/* Facility Unit Buttons */}
+
                     <div className="flex flex-wrap justify-center gap-4">
                         {facilityUnit.length > 0 &&
                             facilityUnit.map((unit, index) => (
