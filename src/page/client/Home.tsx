@@ -72,7 +72,7 @@ const Home = () => {
                 />
             </div>
 
-            <div className="md:w-1/2 w-full mt-14 md:mt-0">
+            <div className="md:w-1/2 w-full mt-8 md:mt-0">
                 <div className="flex flex-col justify-center items-center p-8 md:p-0">
                     <div className="text-center flex flex-col mt-7 md:mt-32">
                         <h1 className="text-4xl md:text-6xl font-bold text-gray-700 mb-4">Let's Play Today</h1>
