@@ -6,6 +6,8 @@ import { Facility } from '../../../types/Facility'
 import toast from 'react-hot-toast'
 import { calculateTimeDifference } from '../../../utils/timeDifference'
 import { userConfirmed } from '../../../utils/cancelToastMessage'
+import moment from 'moment-timezone'
+import { Booking } from '../../../types/Booking'
 
 interface OwnBooking {
     _id: string
@@ -28,7 +30,10 @@ const OwnScheduleModal = ({ isOpen, onClose }: PropsType) => {
             if (isOpen) {
                 try {
                     const res = userCTX && (await axiosFetchBookingsByUser())
-                    setBookings(res?.data)
+                    const sortedBookings = res && res.data.sort((a: Booking, b: Booking) =>
+                        moment(b.date).diff(moment(a.date))
+                    )
+                    setBookings(sortedBookings)
                 } catch (error) {
                     toast.error('Something went wrong.')
                 }
@@ -78,7 +83,8 @@ const OwnScheduleModal = ({ isOpen, onClose }: PropsType) => {
                                     <strong>Duration:</strong> {booking.duration} hour(s)
                                 </p>
                                 <button
-                                    onClick={() => handleCancel(booking._id)} // Or another unique identifier
+                                    onClick={() => handleCancel(booking._id)}
+                                    // disabled={calculateTimeDifference(booking.date, booking.startTime)}
                                     className="mt-4 w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-700"
                                 >
                                     {calculateTimeDifference(booking.date, booking.startTime)

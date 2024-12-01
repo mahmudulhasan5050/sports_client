@@ -149,7 +149,7 @@ const BookingClient = () => {
     }
 
     return (
-        <div className="flex flex-col items-center px-4 mt-10">
+        <div className="flex flex-col items-center px-4 mt-20">
             <div className="w-full md:w-1/2 text-center mb-10 flex items-center justify-center">
                 <FaArrowLeft
                     className="text-gray-700 text-2xl hover:text-blue-500 transition duration-300 cursor-pointer"
@@ -157,7 +157,7 @@ const BookingClient = () => {
                 />
 
                 {/* Title with dynamic horizontal line */}
-                <h1 className="text-3xl font-bold text-gray-800 text-center w-full">
+                <h1 className="text-3xl font-bold text-gray-600 text-center w-full">
                     {allUpperCase(facilityName!)}
                     <span className="block h-1 mt-2 bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 rounded"></span>
                 </h1>

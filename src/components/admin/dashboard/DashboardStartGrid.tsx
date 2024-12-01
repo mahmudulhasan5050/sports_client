@@ -2,14 +2,15 @@ import React,{ReactNode} from 'react'
 import { IoBagHandle, IoPieChart, IoPeople, IoCart } from 'react-icons/io5'
 import { HiOutlineChartBar } from "react-icons/hi";
 import { HiOutlineBookmarkAlt } from "react-icons/hi";
+import { AllInfoType } from '../../../page/admin/Dashboard';
 
 const BoxWrapper = ({ children }:{ children: ReactNode }) =>{
     return <div className="bg-white rounded-sm p-4 flex-1 border border-gray-200 flex items-center">{children}</div>
 }
 
-const DashboardStartGrid = () => {
+const DashboardStartGrid = ({allInfo}: {allInfo: AllInfoType | undefined}) => {
   return (
-    <div className="flex gap-4 w-full">
+    <div className="flex flex-col md:flex-row gap-4 w-full">
         <BoxWrapper>
         <div className="rounded-full h-12 w-12 flex items-center justify-center bg-sky-500">
 					<HiOutlineChartBar className="text-2xl text-white" />
@@ -17,7 +18,7 @@ const DashboardStartGrid = () => {
                 <div className="pl-4">
 					<span className="text-sm text-gray-500 font-light">Total Bookings</span>
 					<div className="flex items-center">
-						<strong className="text-xl text-gray-700 font-semibold">$54232</strong>
+						<strong className="text-xl text-gray-700 font-semibold">{allInfo?.lastMonthCount}</strong>
 						<span className="text-sm text-green-500 pl-2">Previous Month</span>
 					</div>
 				</div>
@@ -29,7 +30,7 @@ const DashboardStartGrid = () => {
 				<div className="pl-4">
 					<span className="text-sm text-gray-500 font-light">Total Bookings</span>
 					<div className="flex items-center">
-						<strong className="text-xl text-gray-700 font-semibold">$3423</strong>
+						<strong className="text-xl text-gray-700 font-semibold">{allInfo?.currentMonthCount}</strong>
 						<span className="text-sm text-red-500 pl-2">This Month</span>
 					</div>
 				</div>
@@ -41,8 +42,8 @@ const DashboardStartGrid = () => {
 				<div className="pl-4">
 					<span className="text-sm text-gray-500 font-light">Total Customers</span>
 					<div className="flex items-center">
-						<strong className="text-xl text-gray-700 font-semibold">12313</strong>
-						<span className="text-sm text-red-500 pl-2">-30</span>
+						<strong className="text-xl text-gray-700 font-semibold">{allInfo?.totalUser}</strong>
+						<span className="text-sm text-red-500 pl-2">users</span>
 					</div>
 				</div>
         </BoxWrapper>
@@ -51,10 +52,10 @@ const DashboardStartGrid = () => {
 					<IoCart className="text-2xl text-white" />
 				</div>
 				<div className="pl-4">
-					<span className="text-sm text-gray-500 font-light">Total Orders</span>
+					<span className="text-sm text-gray-500 font-light">Total Cancel</span>
 					<div className="flex items-center">
-						<strong className="text-xl text-gray-700 font-semibold">16432</strong>
-						<span className="text-sm text-red-500 pl-2">-43</span>
+						<strong className="text-xl text-gray-700 font-semibold">{allInfo?.totalCancelledThisMonth}</strong>
+						<span className="text-sm text-red-500 pl-2">{allInfo?.totalNotRefunded}</span>
 					</div>
 				</div>
         </BoxWrapper>

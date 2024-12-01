@@ -56,6 +56,7 @@ const BookingSummary = () => {
                 // payment success
                 setPayNowLoading(true)
                 bookingInfo.isPaid = true
+
                 const res = await axiosUserBookingCreate(bookingInfo.facilityId, bookingInfo)
                 if (res.data) {
                     toast.success('Payment and booking successful.')
@@ -72,19 +73,19 @@ const BookingSummary = () => {
 
     const handleBackButton = () => {
         localStorage.clear()
+        bookingInfo ? navigate(`/booking-client/${bookingInfo.facilityName}`) : navigate('/')
         setBookingInfo(null)
-        navigate(`/booking-client/${bookingInfo?.facilityName}`)
     }
 
     return (
-        <div className="w-full bg-white flex justify-center mt-10 lg:items-center py-1 px-4">
+        <div className="w-full bg-white flex justify-center mt-20 lg:items-center py-1 px-4">
             <div className="bg-white w-full md:w-2/3 lg:w-1/2 shadow-lg rounded-lg p-6">
                 <div className="flex items-center mb-6">
                     <FaArrowLeft
                         className="text-gray-700 text-2xl hover:text-blue-500 transition duration-300 cursor-pointer"
                         onClick={handleBackButton}
                     />
-                    <h1 className="text-3xl font-bold text-gray-800 text-center w-full">
+                    <h1 className="text-3xl font-bold text-gray-600 text-center w-full">
                         Booking Summary
                         <span className="block h-1 mt-2 bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 rounded"></span>
                     </h1>

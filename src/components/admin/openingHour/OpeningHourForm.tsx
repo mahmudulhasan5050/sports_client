@@ -35,7 +35,7 @@ const FacilityForm = ({
           const response = await axiosFetchOpeningHourById(openingHourtId);
           setFormData(response.data); 
         } catch (error) {
-          console.error('Error fetching facility:', error);
+          toast.error('Something went wrong!')
         }
       }
       setLoading(false);

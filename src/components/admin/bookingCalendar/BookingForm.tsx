@@ -20,7 +20,7 @@ const BookingForm = ({ bookingId, setBookingId, setRefresh }: setRefreshType) =>
         date: '',
         startTime: '',
  
-        duration: 0
+
     })
     //this hook are for drop down list in the form
     //const [facilityUnit, setFacilityUnit] = useState<FacilityUnit[]>([]);
@@ -197,22 +197,8 @@ const BookingForm = ({ bookingId, setBookingId, setRefresh }: setRefreshType) =>
                     />
                 </div>
 
-                {/* duration */}
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                        Game Duration
-                    </label>
-                    <input
-                        id="duration"
-                        name="duration"
-                        type="number"
-                        value={formData.duration}
-                        onChange={handleChange}
-                        placeholder="Enter duration"
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        required
-                    />
-                </div>
+            
+
                 {/* Submit Button */}
                 <div className="flex items-center justify-end gap-3">
                     <button

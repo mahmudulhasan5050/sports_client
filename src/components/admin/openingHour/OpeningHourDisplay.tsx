@@ -6,6 +6,7 @@ import { MdDelete } from "react-icons/md";
 import { firstLetterUpperCase } from '../../../utils/upperLowerConvert'
 import { OpeningHour } from '../../../types/OpeningHour'
 import { axiosFetchOpeningHour, axiosDeleteOpeningHour } from '../../../axios'
+import moment from 'moment-timezone';
 
 type setRefreshType = {
     refresh: boolean
@@ -23,7 +24,7 @@ const OpeningHourDisplay = ({ refresh, setOpeningHourtId, setRefresh }: setRefre
                 const response = await axiosFetchOpeningHour()
                 setOpeningHour(response.data)
             } catch (error) {
-                console.error('Error fetching opening hour:', error)
+                toast.error('Something went wrong!')
             }
         }
 
@@ -55,14 +56,15 @@ const OpeningHourDisplay = ({ refresh, setOpeningHourtId, setRefresh }: setRefre
                                 <th className="py-2 px-4 border-b">Day</th>
                                 <th className="py-2 px-4 border-b">Open</th>
                                 <th className="py-2 px-4 border-b">Close</th>
+                                <th className="py-2 px-4 border-b">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             {openingHour.map((unit) => (
                                 <tr key={unit._id}>
                                     <td className="py-2 px-4 border-b">{firstLetterUpperCase(unit.day)}</td>
-                                    <td className="py-2 px-4 border-b">{unit.open}</td>
-                                    <td className="py-2 px-4 border-b">{unit.close}</td>
+                                    <td className="py-2 px-4 border-b">{moment(unit.open, 'HHmm').format('HH:mm')}</td>
+                                    <td className="py-2 px-4 border-b">{moment(unit.close, 'HHmm').format('HH:mm')}</td>
                                     <td className="py-2 px-4 border-b">
                                         <div className="flex gap-2">
                                             <button

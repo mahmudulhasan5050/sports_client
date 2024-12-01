@@ -29,7 +29,6 @@ export interface Booking {
     facilityId: string
     date: string
     startTime: string
-    duration: number
   }
 
   export interface AdminBookingCreateType {
@@ -38,5 +37,5 @@ export interface Booking {
     facilityId: string
     dates: string[]
     startTime: string
-    duration: number
+    endTime: string
   }

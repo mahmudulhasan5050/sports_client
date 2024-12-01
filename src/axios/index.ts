@@ -39,6 +39,10 @@ export const axiosCancelBookingByUser = async(bookingId:string)=>
 
 
 //admin
+//dashboard
+export const axiosFetchDashboardInfo = async()=>
+    await customAxios.get('/booking/dashboard')
+
 //facility Unit CRUD
 export const axiosCreateFacilityUnit = async (facilityUnit: FacilityUnit) =>
     await customAxios.post('/facilityunit', facilityUnit)
@@ -63,7 +67,7 @@ export const axiosUpdateOpeningHour = async (openingHourtId: string, editOpening
 export const axiosCreateOpeningHour = async (newOpeningHour: OpeningHour) => customAxios.post('/openinghour', newOpeningHour)
 
 //booking admin
-export const axiosFetchBookings = async () => await customAxios.get('/booking')
+export const axiosFetchBookingsLimit30 = async (page: number) => await customAxios.get(`/booking/limit-30/${page}`)
 // export const axiosFetchBookingById = async(bookingId:string)=>
 //     await API.get(`/booking/${bookingId}`) // This is for Edit booking
 export const axiosAdminCreateBooking = async(bookingObjAdmin:BookingCreateType) =>

@@ -33,7 +33,7 @@ const FacilityForm = ({ facilityId, setFacilityId, setRefresh }: SetRefreshType)
                 const facilityUnits = await axiosFetchFacilityUnits()
                 setFacilityUnit(facilityUnits.data)
             } catch (error) {
-                console.error('Error fetching facility units:', error)
+                toast.error('Something went wrong!')
             }
         }
         fetchFacilityUnits()
@@ -46,9 +46,9 @@ const FacilityForm = ({ facilityId, setFacilityId, setRefresh }: SetRefreshType)
             if (facilityId !== '') {
                 try {
                     const response = await axiosFetchFacilityById(facilityId)
-                    setFormData(response.data) // Pre-fill the form with the fetched data
+                    setFormData(response.data) 
                 } catch (error) {
-                    console.error('Error fetching facility:', error)
+                    toast.error('Something went wrong!')
                 }
             }
             setLoading(false)

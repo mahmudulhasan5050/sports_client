@@ -13,9 +13,7 @@ const RefundMain = () => {
     return (
         <div className="flex flex-col gap-4">
             <div className="flex flex-row w-full">
-    
-                    <RefundDisplay refresh={refresh} setRefresh={setRefresh} />
-        
+                <RefundDisplay refresh={refresh} setRefresh={setRefresh} />
             </div>
         </div>
     )

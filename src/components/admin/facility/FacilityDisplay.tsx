@@ -23,7 +23,7 @@ const FacilityUnitDisplay = ({ refresh, setFacilityId, setRefresh }: SetRefreshT
                 setFacilityId('')
                 setFacilities(response.data)
             } catch (error) {
-                console.error('Error fetching facility units:', error)
+                toast.error('Something went wrong!')
             }
         }
         fetchFacility()

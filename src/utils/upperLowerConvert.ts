@@ -1,6 +1,10 @@
 export const firstLetterUpperCase = (word: string) =>{
-   return word[0].toUpperCase() + word.slice(1).toLowerCase()
+   return word
+   .split(' ')
+   .map(w => w[0].toUpperCase() + w.slice(1).toLowerCase())
+   .join(' ')
 }
+
 export const allUpperCase = (word:string)=>{
 return word.toUpperCase()
 }

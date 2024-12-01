@@ -1,6 +1,4 @@
-import React, { useState } from 'react'
-import BookingDisplay from '../../components/admin/bookingTable/BookingDisplay'
-import BookingForm from '../../components/admin/bookingCalendar/BookingForm'
+import { useState } from 'react'
 import CalendarView from '../../components/admin/bookingCalendar/CalendarView'
 import BookingCreateModal from '../../components/admin/bookingCalendar/BookingCreateModal'
 import { Booking } from '../../types/Booking'
@@ -8,13 +6,12 @@ import BookingInfoModal from '../../components/admin/bookingCalendar/BookingInfo
 
 const BookingMain = () => {
     const [refresh, setRefresh] = useState(false)
-    const [bookingId, setBookingId] = useState<string>('')
     const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
     const [isBookingInfoOpen, setIsBookingInfoOpen] = useState<boolean>(false)
     const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null)
     const [bookings, setBookings] = useState<Booking[]>([])
 
-    const toggleHandle = () => {
+    const createBookingButtonHandle = () => {
         // setRefresh(!refresh)
         setIsCreateModalOpen(!isCreateModalOpen)
     }
@@ -33,7 +30,7 @@ const BookingMain = () => {
                         <h2 className="text-lg font-bold mb-4">Booking Calendar</h2>
                         <button
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                            onClick={toggleHandle}
+                            onClick={createBookingButtonHandle}
                         >
                             Create Booking
                         </button>
@@ -44,20 +41,12 @@ const BookingMain = () => {
                         setBookings={setBookings}
                         refresh={refresh}
                         setRefresh={setRefresh}
-                        setBookingId={setBookingId}
                         setSelectedBooking={setSelectedBooking}
                         setIsBookingInfoOpen={setIsBookingInfoOpen}
                     />
                 </div>
             </div>
-            {/* <div className="flex flex-row w-full">
-                {!refresh ? (
-                    <BookingDisplay setBookingId={setBookingId} refresh={refresh} setRefresh={setRefresh} />
-                ) : (
-                    <BookingForm bookingId={bookingId} setBookingId={setBookingId} setRefresh={setRefresh} />
-                )}
-            </div> */}
-            <BookingCreateModal isCreateModalOpen={isCreateModalOpen} setRefresh={setRefresh} onClose={toggleHandle} />
+            <BookingCreateModal isCreateModalOpen={isCreateModalOpen} setRefresh={setRefresh} createBookingButtonHandle={createBookingButtonHandle} />
             {selectedBooking && isBookingInfoOpen && (
                 <BookingInfoModal
                     selectedBooking={selectedBooking}
@@ -74,4 +63,3 @@ const BookingMain = () => {
 
 export default BookingMain
 
-//onSubmit={handleCreateBooking}

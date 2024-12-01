@@ -23,7 +23,7 @@ const FacilityUnitDisplay = ({ refresh, setRefresh }: setRefreshType) => {
         const response = await axiosFetchFacilityUnits();
         setFacilityUnits(response.data);
       } catch (error) {
-        console.error('Error fetching facility units:', error);
+        toast.error('Something went wrong!')
       }
     };
 
@@ -38,7 +38,7 @@ const FacilityUnitDisplay = ({ refresh, setRefresh }: setRefreshType) => {
       setFacilityUnits(facilityUnits.filter((unit) => unit._id !== id));
       toast.success('Facility unit has been deleted!');
     } catch (error) {
-      console.error('Error deleting facility unit:', error);
+      toast.error('Something went wrong!')
     }
   };
 

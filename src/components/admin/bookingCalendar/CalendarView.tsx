@@ -8,10 +8,9 @@ import { firstLetterUpperCase } from '../../../utils/upperLowerConvert'
 import { generateTimeSlots } from '../../../utils/generateTimeSlot'
 
 type CalendarViewProps = {
-    bookings: Booking[] 
-    setBookings: (booking: Booking[])=> void
+    bookings: Booking[]
+    setBookings: (booking: Booking[]) => void
     refresh: boolean
-    setBookingId: (value: string) => void
     setRefresh: (value: boolean) => void
     setSelectedBooking: (value: Booking) => void
     setIsBookingInfoOpen: (value: boolean) => void
@@ -21,7 +20,6 @@ const CalendarView = ({
     bookings,
     setBookings,
     refresh,
-    setBookingId,
     setRefresh,
     setSelectedBooking,
     setIsBookingInfoOpen
@@ -46,7 +44,7 @@ const CalendarView = ({
                 return a.courtNumber - b.courtNumber
             })
             setAllFacility(sortedFacilities)
-            setBookingId('')
+        
         } catch (error) {
             toast.error('Bookings are not available')
         }
@@ -111,7 +109,6 @@ const CalendarView = ({
             </td>
         )
     }
-
 
     return (
         <>

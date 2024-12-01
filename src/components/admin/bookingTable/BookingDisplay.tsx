@@ -3,7 +3,7 @@ import { getMemberRoleMark } from '../../../utils/getBookingPaymentStatus'
 import ReactDatePicker from 'react-datepicker'
 import { SlCalender } from 'react-icons/sl'
 import { Booking } from '../../../types/Booking'
-import { axiosFetchBookings } from '../../../axios'
+import { axiosFetchBookingsLimit30 } from '../../../axios'
 import toast from 'react-hot-toast'
 import moment from 'moment-timezone'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -16,17 +16,32 @@ const BookingDisplay = () => {
     const [email, setEmail] = useState<string>('')
     const [selectedDate, setSelectedDate] = useState<string>('')
 
-    useEffect(() => {
-        const fetchBookings = async () => {
-            try {
-                const res = await axiosFetchBookings()
-                setBookings(res.data)
-            } catch (error) {
-                toast.error('Bookings are not available')
-            }
+    const [currentPage, setCurrentPage] = useState<number>(1)
+    const [totalBookings, setTotalBookings] = useState<number>(0)
+
+    const fetchBookings = async (page: number) => {
+        try {
+            const res = await axiosFetchBookingsLimit30(page)
+            const sortedBookings = res.data.bookings.sort((a: Booking, b: Booking) =>
+                moment(b.date).diff(moment(a.date))
+            )
+            setBookings(sortedBookings)
+            setTotalBookings(res.data.totalBookings)
+        } catch (error) {
+            toast.error('Bookings are not available')
         }
-        fetchBookings()
+    }
+
+    useEffect(() => {
+        fetchBookings(currentPage)
     }, [])
+    useEffect(() => {
+        fetchBookings(currentPage)
+    }, [currentPage])
+    useEffect(() => {
+        filterBookings()
+    }, [bookings, month, paymentStatus, email, selectedDate])
+
 
     const filterBookings = () => {
         let updatedBookings = bookings
@@ -59,16 +74,15 @@ const BookingDisplay = () => {
         setFilteredBookings(updatedBookings)
     }
 
-    useEffect(() => {
-        filterBookings()
-    }, [bookings, month, paymentStatus, email, selectedDate])
-
     const handleDateChange = (date: Date | null) => {
         if (date) {
             setSelectedDate(moment(date).format('YYYY-MM-DD'))
         } else {
             setSelectedDate('')
         }
+    }
+    const handlePageChange = (newPage: number) => {
+        setCurrentPage(newPage)
     }
     const clearSearch = () => {
         setFilteredBookings([])
@@ -131,7 +145,7 @@ const BookingDisplay = () => {
             {/* Bookings Table */}
             <div
                 className="border-x border-gray-200 rounded-sm mt-3 overflow-y-auto overflow-x-auto"
-                style={{ maxHeight: '500px' }} 
+                style={{ maxHeight: '500px' }}
             >
                 <table className="table-fixed w-full text-gray-700">
                     <thead>
@@ -179,6 +193,26 @@ const BookingDisplay = () => {
                         )}
                     </tbody>
                 </table>
+            </div>
+            {/* pagination */}
+            <div className="flex justify-between items-center mt-4">
+                <button
+                    disabled={currentPage === 1}
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+                >
+                    Previous
+                </button>
+                <span>
+                    Page {currentPage} of {isNaN(Math.ceil(totalBookings / 30)) ? 1 : Math.ceil(totalBookings / 30)}
+                </span>
+                <button
+                    disabled={(currentPage === Math.ceil(totalBookings / 30))}
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+                >
+                    Next
+                </button>
             </div>
         </div>
     )
