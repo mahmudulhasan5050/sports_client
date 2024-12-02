@@ -27,7 +27,8 @@ useEffect(() => {
   };
 
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen'>
+    <div className='flex flex-col items-center justify-center'>
+      <div className='w-[90%] text-center mt-48'>
     <h1 className='text-2xl font-bold'>{confirmationMessage}</h1>
     {confirmationMessage.includes('Email confirmed') && (
       <button
@@ -37,6 +38,7 @@ useEffect(() => {
         Go to Login
       </button>
     )}
+    </div>
   </div>
   )
 }
