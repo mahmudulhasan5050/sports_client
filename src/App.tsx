@@ -39,7 +39,7 @@ function App() {
             <div className="flex flex-col min-h-screen">
             {!isAdminRoute && <HeaderClient />}
             <ScrollToTop />
-            <main className="flex-grow">
+            <main className="flex-1">
             <Routes>
                 {/* Booking operation pages */}
                 <Route path="/" element={<Home />} />
