@@ -322,6 +322,7 @@ const CalendarView = ({
                     className="px-4 py-2 bg-gray-100 rounded text-center"
                     withPortal
                     shouldCloseOnSelect={false}
+                    onFocus={(e) => e.preventDefault()}
                 />
                 <button
                     className="bg-gradient-to-tl to-green-400 from-slate-100 p-2 rounded-r hover:to-slate-100 hover:from-green-400"

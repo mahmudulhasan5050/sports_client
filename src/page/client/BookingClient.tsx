@@ -177,6 +177,7 @@ const BookingClient = () => {
                     icon={<SlCalender className="items-end" />}
                     withPortal
                     shouldCloseOnSelect={false}
+                    onFocus={(e) => e.preventDefault()}
                 />
             </div>
             {error && <ErrorComp message={error} />} {/* Show error message if error */}
