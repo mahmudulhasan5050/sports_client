@@ -139,6 +139,7 @@ const BookingClient = () => {
         clearState()
         navigate(`/`)
     }
+  
 
     const clearState = () => {
         setAvailableCourts([])
@@ -168,12 +169,14 @@ const BookingClient = () => {
                 <ReactDatePicker
                     showIcon
                     selected={date}
-                    onChange={handleDateChange}
+                    onChange={(selectedDate)=>{handleDateChange(selectedDate)}}
                     minDate={todayToString() as Date}
                     maxDate={count15DaysFromToday() as Date}
                     className="w-full shadow-md border rounded py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     wrapperClassName="w-full"
                     icon={<SlCalender className="items-end" />}
+                    withPortal
+                    shouldCloseOnSelect={false}
                 />
             </div>
             {error && <ErrorComp message={error} />} {/* Show error message if error */}

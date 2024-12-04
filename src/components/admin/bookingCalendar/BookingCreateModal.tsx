@@ -305,7 +305,7 @@ const BookingCreateModal = ({
 
                     {/* User Search */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Search User</label>
+                        <label className="block text-sm font-medium text-gray-700">Search by Name</label>
                         <div className="relative">
                             {/* Input Field */}
                             <input
@@ -318,17 +318,17 @@ const BookingCreateModal = ({
                                 className="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                             />
 
-                            {/* Dropdown Suggestions */}
+                            {/* Dropdown */}
                             {searchTerm &&
-                                filteredUsers.length > 0 && ( // Display dropdown only when there is a search term and results
+                                filteredUsers.length > 0 && (
                                     <ul className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-40 overflow-y-auto">
                                         {filteredUsers.map((user) => (
                                             <li
                                                 key={user._id}
                                                 onClick={() => {
-                                                    setSearchTerm(user.name) // Update search input with selected user's name
-                                                    setFormData({ ...formData, email: user.email }) // Update formData with user's email
-                                                    setFilteredUsers([]) // Clear dropdown after selection
+                                                    setSearchTerm(user.name) 
+                                                    setFormData({ ...formData, email: user.email }) 
+                                                    setFilteredUsers([]) 
                                                 }}
                                                 className="cursor-pointer p-2 hover:bg-gray-200"
                                             >

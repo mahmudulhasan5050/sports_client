@@ -65,9 +65,9 @@ const AvailableFacility = ({
                 <div className="flex justify-between w-full items-center">
                     <div className="flex flex-col">
                         <h3 className="text-xl font-bold text-gray-800">
-                            {firstLetterUpperCase(facility.type)}-{facility.courtNumber}
+                            {firstLetterUpperCase(facility.type)} {facility.courtNumber}
                         </h3>
-                        <p className="text-md text-gray-600">{facility.pricePerHour} euros/h</p>
+                        {/* <p className="text-md text-gray-600">{facility.pricePerHour} euros/h</p> */}
                     </div>
                     <div className="flex justify-center items-center ">
                         <button
