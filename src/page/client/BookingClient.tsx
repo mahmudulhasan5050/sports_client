@@ -31,6 +31,7 @@ export interface CreateBookingObjType {
     paymentAtCounter: boolean
 }
 
+
 const BookingClient = () => {
     const { userCTX } = useUser()
 
@@ -46,6 +47,8 @@ const BookingClient = () => {
     const [availableTime, setAvailableTime] = useState<string[]>([])
     const [availableCourts, setAvailableCourts] = useState<Facility[]>([])
     const [availableGameDurations, setAvailableGameDurations] = useState<number[]>([])
+
+    const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
 
     //These hooks are for final selection from user
     const [time, setTime] = useState<string>('')
@@ -85,6 +88,7 @@ const BookingClient = () => {
     const handleDateChange = (selectedDate: Date | null) => {
         if (selectedDate) {
             setDate(selectedDate)
+            setIsCalendarOpen(false);
         } else {
             setDate(null)
         }
@@ -135,6 +139,19 @@ const BookingClient = () => {
         }
     }
 
+    const CustomButton = React.forwardRef<HTMLButtonElement, any>(
+        ({ value, onClick }, ref) => (
+            <button
+                ref={ref}
+                onClick={onClick}
+                className="flex items-center justify-between w-full bg-white border border-gray-300 rounded py-2 px-3 shadow-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+                <span>{value || 'Select Date'}</span>
+                <SlCalender className="text-gray-500" />
+            </button>
+        )
+    );
+
     const handleBackButton = () => {
         clearState()
         navigate(`/`)
@@ -166,17 +183,18 @@ const BookingClient = () => {
                 <label className="block text-gray-700 text-md font-bold mb-2">Select Date</label>
 
                 <ReactDatePicker
-                    showIcon
+               
                     selected={date}
-                    onChange={(selectedDate)=>{handleDateChange(selectedDate)}}
+                    onChange={handleDateChange}
                     minDate={todayToString() as Date}
                     maxDate={count15DaysFromToday() as Date}
-                    className="w-full shadow-md border rounded py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    customInput={<CustomButton />}
                     wrapperClassName="w-full"
-                    icon={<SlCalender className="items-end" />}
-                    withPortal
-                    shouldCloseOnSelect={false}
-                   //customInput={<ExampleCustomInput className="w-full shadow-md border rounded py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />}
+                    dateFormat="dd-MM-yyyy"
+                    popperPlacement="bottom-start"
+                    open={isCalendarOpen}
+                    onClickOutside={() => setIsCalendarOpen(false)}
+                    onInputClick={() => setIsCalendarOpen(true)}
                 />
             </div>
             {error && <ErrorComp message={error} />} {/* Show error message if error */}

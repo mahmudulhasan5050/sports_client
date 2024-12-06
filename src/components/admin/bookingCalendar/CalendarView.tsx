@@ -290,13 +290,13 @@ const CalendarView = ({
         return (
             <td
                 key={`${court._id}-${time}`}
-                className="border-4 border-sky-300 bg-green-200 h-[35px] w-[35px]"
+                className="border-4 border-sky-300 bg-green-200"
                 rowSpan={slotsToSpan}
                 onClick={() => handleBookingClick(booking)}
             >
                 <div className="rounded">
-                    <p className="text-xs">{firstLetterUpperCase(booking.user.name)}</p>
-                    <p>{booking.isPaid ? 'Paid' : 'Unpaid'}</p>
+                    {/* <p className="text-xs">{firstLetterUpperCase(booking.user.name)}</p> */}
+                    <p className={booking.isPaid ? 'bg-green-500 text-white px-1 rounded': 'bg-red-400 text-white rounded px-1'}>{booking.isPaid ? 'Paid' : 'Unpaid'}</p>
                 </div>
             </td>
         )
@@ -362,11 +362,11 @@ const CalendarView = ({
                     <tbody>
                         {timeSlots.map((timeSlot, rowIndex) => (
                             <tr key={rowIndex}>
-                                <td className="border p-2 text-center h-[35px] w-[35px]">{timeSlot}</td>
+                                <td className="border p-2 text-center">{timeSlot}</td>
                                 {allFacility.slice(visibleColumns, visibleColumns + 2).map((court) => (
                                     <td
                                         key={`${court._id}-${rowIndex}`}
-                                        className="border p-2 h-[35px] w-[35px]"
+                                        className="border p-2"
                                     >
                                         {renderBooking(court, timeSlot)}
                                     </td>
