@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, forwardRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { FaArrowLeft } from 'react-icons/fa'
@@ -139,7 +139,6 @@ const BookingClient = () => {
         clearState()
         navigate(`/`)
     }
-  
 
     const clearState = () => {
         setAvailableCourts([])
@@ -177,7 +176,7 @@ const BookingClient = () => {
                     icon={<SlCalender className="items-end" />}
                     withPortal
                     shouldCloseOnSelect={false}
-                    onFocus={(e) => e.preventDefault()}
+                   //customInput={<ExampleCustomInput className="w-full shadow-md border rounded py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />}
                 />
             </div>
             {error && <ErrorComp message={error} />} {/* Show error message if error */}
