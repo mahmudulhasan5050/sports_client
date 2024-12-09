@@ -15,7 +15,6 @@ type SetRefreshType = {
 const FacilityUnitDisplay = ({ refresh, setFacilityId, setRefresh }: SetRefreshType) => {
     const [facilities, setFacilities] = useState<Facility[]>([])
 
-    // Fetch Facility when component mounts
     useEffect(() => {
         const fetchFacility = async () => {
             try {
@@ -29,11 +28,9 @@ const FacilityUnitDisplay = ({ refresh, setFacilityId, setRefresh }: SetRefreshT
         fetchFacility()
     }, [refresh])
 
-    // Handle delete facility
     const handleDelete = async (id: string) => {
         try {
             await axiosDeleteFacility(id)
-            // Update the UI after deletion
             setFacilities(facilities.filter((unit) => unit._id !== id))
             toast.success('Facility has been deleted!')
         } catch (error) {
@@ -52,8 +49,7 @@ const FacilityUnitDisplay = ({ refresh, setFacilityId, setRefresh }: SetRefreshT
                     <table className="w-full text-gray-700">
                         <thead>
                             <tr>
-                                <th className="py-2 px-4 border-b">Name</th>
-                                <th className="py-2 px-4 border-b">Court</th>
+                                <th className="py-2 px-4 border-b">Courts</th>
                                 <th className="py-2 px-4 border-b">Price</th>
                                 <th className="py-2 px-4 border-b">Status</th>
                                 <th className="py-2 px-4 border-b">Action</th>
@@ -62,8 +58,7 @@ const FacilityUnitDisplay = ({ refresh, setFacilityId, setRefresh }: SetRefreshT
                         <tbody>
                             {facilities.map((unit) => (
                                 <tr key={unit._id}>
-                                    <td className="py-2 px-4 border-b">{firstLetterUpperCase(unit.type)}</td>
-                                    <td className="py-2 px-4 border-b">{unit.courtNumber}</td>
+                                    <td className="py-2 px-4 border-b">{firstLetterUpperCase(unit.type)} {unit.courtNumber}</td>
                                     <td className="py-2 px-4 border-b">{unit.pricePerHour}</td>
                                     <td className="py-2 px-4 border-b">{unit.isActive ? 'Active': 'Inactive'}</td>
                                     

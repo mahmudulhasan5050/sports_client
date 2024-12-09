@@ -190,7 +190,7 @@ const BookingClient = () => {
                     maxDate={count15DaysFromToday() as Date}
                     customInput={<CustomButton />}
                     wrapperClassName="w-full"
-                    dateFormat="dd-MM-yyyy"
+                     dateFormat="dd-MM-yyyy"
                     popperPlacement="bottom-start"
                     open={isCalendarOpen}
                     onClickOutside={() => setIsCalendarOpen(false)}

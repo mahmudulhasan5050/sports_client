@@ -54,8 +54,7 @@ const OpeningHourDisplay = ({ refresh, setOpeningHourtId, setRefresh }: setRefre
                         <thead>
                             <tr>
                                 <th className="py-2 px-4 border-b">Day</th>
-                                <th className="py-2 px-4 border-b">Open</th>
-                                <th className="py-2 px-4 border-b">Close</th>
+                                <th className="py-2 px-4 border-b">Time</th>
                                 <th className="py-2 px-4 border-b">Action</th>
                             </tr>
                         </thead>
@@ -63,8 +62,7 @@ const OpeningHourDisplay = ({ refresh, setOpeningHourtId, setRefresh }: setRefre
                             {openingHour.map((unit) => (
                                 <tr key={unit._id}>
                                     <td className="py-2 px-4 border-b">{firstLetterUpperCase(unit.day)}</td>
-                                    <td className="py-2 px-4 border-b">{moment(unit.open, 'HHmm').format('HH:mm')}</td>
-                                    <td className="py-2 px-4 border-b">{moment(unit.close, 'HHmm').format('HH:mm')}</td>
+                                    <td className="py-2 px-4 border-b">{moment(unit.open, 'HHmm').format('HH:mm')} {moment(unit.close, 'HHmm').format('HH:mm')}</td>
                                     <td className="py-2 px-4 border-b">
                                         <div className="flex gap-2">
                                             <button

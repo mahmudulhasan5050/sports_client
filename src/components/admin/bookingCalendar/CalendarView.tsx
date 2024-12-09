@@ -188,6 +188,8 @@
 // }
 
 // export default CalendarView
+
+///-------------------------------------------------------------------
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import ReactDatePicker from 'react-datepicker'
@@ -197,6 +199,8 @@ import moment, { Moment } from 'moment-timezone'
 import { Facility } from '../../../types/Facility'
 import { firstLetterUpperCase } from '../../../utils/upperLowerConvert'
 import { generateTimeSlots } from '../../../utils/generateTimeSlot'
+import { SlCalender } from 'react-icons/sl'
+import { todayToString } from '../../../utils/dates'
 
 type CalendarViewProps = {
     bookings: Booking[]
@@ -217,10 +221,11 @@ const CalendarView = ({
 }: CalendarViewProps) => {
     const [allFacility, setAllFacility] = useState<Facility[]>([])
     const [visibleColumns, setVisibleColumns] = useState<number>(0) // Starting column index
-    const [selectedDate, setSelectedDate] = useState<Moment>(moment())
+    const [selectedDate, setSelectedDate] = useState<Moment>(moment(todayToString()))
     const timeSlots = generateTimeSlots()
+    const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false)
 
-    const fetchBookings = async (date: moment.Moment) => {
+    const fetchBookings = async (date: Moment) => {
         try {
             const formattedDate = date.format('YYYY-MM-DD')
             const fetchedBookingsByDate = await axiosGetBookingByDate(formattedDate)
@@ -241,13 +246,19 @@ const CalendarView = ({
         fetchBookings(selectedDate)
     }, [selectedDate])
 
-    const handleDateChange = (direction: 'prev' | 'next' | Moment) => {
+    const handleDateChange = (direction: 'prev' | 'next') => {
         if (direction === 'prev') {
-            setSelectedDate((prev) => prev.clone().subtract(1, 'days'))
+            setSelectedDate((prevD) => prevD.clone().subtract(1, 'days'))
         } else if (direction === 'next') {
-            setSelectedDate((prev) => prev.clone().add(1, 'days'))
+            setSelectedDate((prevD) => prevD.clone().add(1, 'days'))
+        }
+    }
+    const handleDateChangeDatePicker = (date: Date | null) => {
+        if (date) {
+            setSelectedDate(moment(date))
+            setIsCalendarOpen(false)
         } else {
-            setSelectedDate(moment(direction))
+            throw new Error('Date is null')
         }
     }
 
@@ -268,35 +279,55 @@ const CalendarView = ({
         }
     }
 
+    const CustomButton = React.forwardRef<HTMLButtonElement, any>(({ value, onClick }, ref) => (
+        <button
+            ref={ref}
+            onClick={onClick}
+            className="flex items-center justify-between w-full bg-white border border-gray-300 rounded py-2 px-3 shadow-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+            <span>{value || 'Select Date'}</span>
+            <SlCalender className="text-gray-500" />
+        </button>
+    ))
+    ///
     const renderBooking = (court: Facility, time: string) => {
         const booking = bookings.find(
             (b) =>
                 b.facility.type === court.type &&
                 b.facility.courtNumber === court.courtNumber &&
-                moment(time, 'HH:mm').isBetween(
-                    moment(b.startTime, 'HHmm'),
-                    moment(b.endTime, 'HHmm'),
-                    'minute',
-                    '[)'
-                )
+                moment(time, 'HH:mm').isBetween(moment(b.startTime, 'HHmm'), moment(b.endTime, 'HHmm'), 'minute', '[)')
         )
 
         if (!booking) return null
 
+        // Calculate the number of 30-minute slots to span
         const slotsToSpan = Math.ceil(
             moment(booking.endTime, 'HHmm').diff(moment(booking.startTime, 'HHmm'), 'minutes') / 30
         )
 
+        // Only render the booking at the starting time slot
+        const isStartTimeSlot = moment(time, 'HH:mm').isSame(moment(booking.startTime, 'HHmm'))
+
+        if (!isStartTimeSlot) return <td className="hidden"></td> // Skip rendering for non-starting cells
+
         return (
             <td
                 key={`${court._id}-${time}`}
-                className="border-4 border-sky-300 bg-green-200"
+                className="border-4 border-sky-300 bg-green-200 align-top"
                 rowSpan={slotsToSpan}
                 onClick={() => handleBookingClick(booking)}
             >
-                <div className="rounded">
-                    {/* <p className="text-xs">{firstLetterUpperCase(booking.user.name)}</p> */}
-                    <p className={booking.isPaid ? 'bg-green-500 text-white px-1 rounded': 'bg-red-400 text-white rounded px-1'}>{booking.isPaid ? 'Paid' : 'Unpaid'}</p>
+                <div className="rounded h-full flex flex-col justify-center items-center">
+                    <p className="text-xs font-bold">{firstLetterUpperCase(booking.user.name || 'User')}</p>
+                    <p
+                        className={
+                            booking.isPaid
+                                ? 'bg-green-500 text-white px-2 py-1 rounded text-xs mt-1'
+                                : 'bg-red-400 text-white px-2 py-1 rounded text-xs mt-1'
+                        }
+                    >
+                        {booking.isPaid ? 'Paid' : 'Unpaid'}
+                    </p>
                 </div>
             </td>
         )
@@ -313,16 +344,14 @@ const CalendarView = ({
                 </button>
                 <ReactDatePicker
                     selected={selectedDate.toDate()}
-                    onChange={(date: Date | null) => {
-                        if (date) {
-                            handleDateChange(moment(date))
-                        }
-                    }}
+                    onChange={handleDateChangeDatePicker}
                     dateFormat="dd-MM-yyyy"
-                    className="px-4 py-2 bg-gray-100 rounded text-center"
-                    withPortal
-                    shouldCloseOnSelect={false}
-                    onFocus={(e) => e.preventDefault()}
+                    customInput={<CustomButton />}
+                    popperPlacement="bottom-start"
+                    open={isCalendarOpen}
+                    wrapperClassName="w-full"
+                    onClickOutside={() => setIsCalendarOpen(false)}
+                    onInputClick={() => setIsCalendarOpen(true)}
                 />
                 <button
                     className="bg-gradient-to-tl to-green-400 from-slate-100 p-2 rounded-r hover:to-slate-100 hover:from-green-400"
@@ -363,14 +392,14 @@ const CalendarView = ({
                         {timeSlots.map((timeSlot, rowIndex) => (
                             <tr key={rowIndex}>
                                 <td className="border p-2 text-center">{timeSlot}</td>
-                                {allFacility.slice(visibleColumns, visibleColumns + 2).map((court) => (
-                                    <td
-                                        key={`${court._id}-${rowIndex}`}
-                                        className="border p-2"
-                                    >
-                                        {renderBooking(court, timeSlot)}
-                                    </td>
-                                ))}
+                                {allFacility.slice(visibleColumns, visibleColumns + 2).map((court) => {
+                                    const bookingCell = renderBooking(court, timeSlot)
+                                    return bookingCell ? (
+                                        bookingCell
+                                    ) : (
+                                        <td key={`${court._id}-${rowIndex}`} className="border p-2"></td>
+                                    )
+                                })}
                             </tr>
                         ))}
                     </tbody>

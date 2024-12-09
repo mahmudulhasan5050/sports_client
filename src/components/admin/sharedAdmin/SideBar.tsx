@@ -19,7 +19,7 @@ const linkClasses =
                     pathname === item.path ? ' bg-neutral-700 text-white' : 'text-neutral-400',
                     linkClasses
                 )}
-                onClick={closeSidebar} // Close the sidebar on click
+                onClick={closeSidebar}
             >
                 <span className="text-xl">{item.icon}</span>
                 {item.label}
