@@ -28,6 +28,7 @@ const SignUp = () => {
                 email: '',
                 password: ''
             })
+          
             navigate('/check-your-email')
         } catch (error) {
             setError('Register Failed!')

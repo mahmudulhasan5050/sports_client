@@ -10,8 +10,8 @@ export type Token = {
 };
 
 
-export const saveToken = (token: string) => {
-  Cookies.set('token', JSON.stringify(token));
+export const saveToken = async(token: string) => {
+  await Cookies.set('token', JSON.stringify(token));
 };
 
 export const getToken = () => {

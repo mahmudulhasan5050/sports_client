@@ -48,11 +48,11 @@ const BookingSummary = () => {
     const paymentHandle = async () => {
         if (bookingInfo && userCTX) {
             try {
-                // const resStripe = await axiosStripeCheckout()
-                // const {url} = resStripe.data
-                // if(url){
-                //     window.location.href = url
-                // }
+                const resStripe = await axiosStripeCheckout()
+                const {url} = resStripe.data
+                if(url){
+                    window.location.href = url
+                }
                 // payment success
                 setPayNowLoading(true)
                 bookingInfo.isPaid = true

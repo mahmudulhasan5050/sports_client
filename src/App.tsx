@@ -54,6 +54,7 @@ function App() {
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/reset-password/:token" element={<ResetPassword />} />
                 <Route path="/google-auth-success/:token" element={<GoogleAuthSuccess />} />
+                
 
                 <Route path="/payment-error" element={<PaymentError />} />
                 <Route path="/payment-success/:session_id" element={<PaymentSuccess />} />

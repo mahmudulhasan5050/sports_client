@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { FcGoogle } from "react-icons/fc";
-
+import { FcGoogle } from 'react-icons/fc'
 
 import { SignInType } from '../types/User'
 import { axiosGoogleSignIn, axiosSignIn } from '../axios'
@@ -16,7 +15,13 @@ const SignIn = () => {
 
     const [error, setError] = useState<string | null>(null)
     const navigate = useNavigate()
-    const { userCTX ,setUserCTX } = useUser()
+    const { userCTX, setUserCTX } = useUser()
+
+    useEffect(() => {
+        if (userCTX?.role === 'admin') {
+            navigate('/admin')
+        }
+    }, [userCTX, navigate])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target
@@ -27,19 +32,17 @@ const SignIn = () => {
         e.preventDefault()
         try {
             const res = await axiosSignIn(formData)
+     
+                if (res.data) {
+              
+                    const userFromToken = tokenDecodeFunc(res.data)
+                    setUserCTX({
+                        name: userFromToken.name,
+                        role: userFromToken.role
+                    })
+                }
 
-            if (res.data) {
-                saveToken(res.data)
-                const userFromToken = tokenDecodeFunc(res.data)
-                setUserCTX({
-                    name: userFromToken.name,
-                    role: userFromToken.role
-                })
-            }
-        } catch (err) {
-            // Handle error
-            setError('Invalid credentials. Please try again.')
-        }finally{
+            saveToken(res.data)
             userCTX && userCTX.role === 'admin' && navigate('/admin')
             const localStorageBooking = localStorage.getItem('booking')
 
@@ -49,6 +52,9 @@ const SignIn = () => {
             } else {
                 navigate('/')
             }
+        } catch (err) {
+            // Handle error
+            setError('Invalid credentials. Please try again.')
         }
     }
 
@@ -64,7 +70,7 @@ const SignIn = () => {
                     onClick={handleGoogleSignin}
                     className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-blue-600 bg-white border border-blue-500 rounded-lg hover:bg-blue-100 focus:outline-none focus:ring"
                 >
-                    <FcGoogle className="w-5 h-5 mr-2"/>
+                    <FcGoogle className="w-5 h-5 mr-2" />
                     Sign in with Google
                 </button>
 

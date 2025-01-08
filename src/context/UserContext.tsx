@@ -13,7 +13,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [userCTX, setUserCTX] = useState<UserCTXType | null>(null);
-
+console.log(userCTX)
   return (
     <UserContext.Provider
       value={{ userCTX, setUserCTX }}

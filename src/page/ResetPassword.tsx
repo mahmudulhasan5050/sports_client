@@ -1,33 +1,37 @@
-import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { axiosResetPassword } from '../axios'; // Import your axios function
+import React, { useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { axiosResetPassword } from '../axios' // Import your axios function
 
 const ResetPassword = () => {
-    const { token } = useParams<{ token: string }>();
-    const [password, setPassword] = useState<string>('');
-    const [confirmPassword, setConfirmPassword] = useState<string>('');
-    const [message, setMessage] = useState<string | null>(null);
-    const [error, setError] = useState<string | null>(null);
-    const navigate = useNavigate();
+    const { token } = useParams<{ token: string }>()
+    const [password, setPassword] = useState<string>('')
+    const [confirmPassword, setConfirmPassword] = useState<string>('')
+    const [message, setMessage] = useState<string | null>(null)
+    const [error, setError] = useState<string | null>(null)
+    const [loading, setLoading] = useState<boolean>(false)
+    const navigate = useNavigate()
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+        e.preventDefault()
         if (password !== confirmPassword) {
-            setError('Passwords do not match');
-            return;
+            setError('Passwords do not match')
+            return
         }
         try {
-            const res = await axiosResetPassword(token!, { password });
-            if (res.data) {
-                setMessage('Password has been reset. You can now sign in.');
-                setTimeout(() => {
-                    navigate('/signin'); // Redirect to SignIn after successful reset
-                }, 3000);
-            }
+            setLoading(true)
+            const res = await axiosResetPassword(token!, { password })
+
+            setTimeout(() => {
+                if (res.data) {
+                    setMessage('Password has been reset. You can now sign in.')
+                    navigate('/signin') // Redirect to SignIn after successful reset
+                    setLoading(false)
+                }
+            }, 3000)
         } catch (err) {
-            setError('Error resetting password. Please try again.');
+            setError('Error resetting password. Please try again.')
         }
-    };
+    }
 
     return (
         <div className="flex items-center justify-center mt-40 lg:mt-60">
@@ -65,13 +69,17 @@ const ResetPassword = () => {
 
                 <button
                     type="submit"
-                    className="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-lg hover:bg-blue-600"
+                    className="w-full px-4 py-2 text-center font-bold text-white bg-blue-500 rounded-lg hover:bg-blue-600 flex justify-center items-center"
                 >
-                    Reset Password
+                    {loading ? (
+                        <div className="w-4 h-4 border-2 border-t-white border-b-white border-l-transparent border-r-transparent rounded-full animate-spin"></div>
+                    ) : (
+                        'Reset Password'
+                    )}
                 </button>
             </form>
         </div>
-    );
-};
+    )
+}
 
-export default ResetPassword;
+export default ResetPassword

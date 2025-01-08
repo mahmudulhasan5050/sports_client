@@ -6,18 +6,22 @@ const ForgotPassword = () => {
     const [email, setEmail] = useState<string>('')
     // const [message, setMessage] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null)
+    const [loading, setLoading] = useState<boolean>(false)
     const navigate = useNavigate()
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
         try {
+            setLoading(true)
             const res = await axiosForgotPassword({ email })
-            if (res.data) {
-                setTimeout(() => {
+
+            setTimeout(() => {
+                if (res.data) {
                     navigate('/check-your-email')
-                }, 3000)
-            }
+                    setLoading(false)
+                }
+            }, 3000)
         } catch (err) {
             setError('Error sending reset link. Please try again.')
         }
@@ -45,9 +49,13 @@ const ForgotPassword = () => {
                     </div>
                     <button
                         type="submit"
-                        className="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-lg hover:bg-blue-600"
+                        className="w-full px-4 py-2 text-center font-bold text-white bg-blue-500 rounded-lg hover:bg-blue-600 flex justify-center items-center"
                     >
-                        Send Reset Link
+                        {loading ? (
+                            <div className="w-4 h-4 border-2 border-t-white border-b-white border-l-transparent border-r-transparent rounded-full animate-spin"></div>
+                        ) : (
+                            'Send Reset Link'
+                        )}
                     </button>
 
                     <p className="text-center">
