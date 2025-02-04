@@ -2,18 +2,15 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
  "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
 <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
- width="1280.000000pt" height="1080.000000pt" viewBox="0 0 1080.000000 1080.000000"
+ width="1280.000000pt" height="900.000000pt" viewBox="0 0 1080.000000 1080.000000"
  preserveAspectRatio="xMidYMid meet">
 
-  <defs>
-    <linearGradient id="gradient-to-tl" x1="0%" y1="100%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#d40000   ; stop-opacity:1" /> <!-- Blue -->
-      <stop offset="100%" style="stop-color:#1D2671; stop-opacity:1" /> <!-- Orange -->
-    </linearGradient>
-  </defs>
+
 
 <g transform="translate(0.000000,1080.000000) scale(0.100000,-0.100000)"
-fill="url(#gradient-to-tl)" stroke="none">
+fill="#07548c" stroke="none">
+
+
 <path d="M6475 10421 c-33 -10 -64 -18 -68 -19 -5 0 -11 -2 -13 -5 -3 -3 32
 -5 78 -6 46 -1 100 -6 121 -10 31 -8 39 -6 47 9 23 43 -69 61 -165 31z"/>
 <path d="M6223 10350 c-24 -11 -43 -22 -43 -25 0 -6 93 3 119 11 11 4 10 8 -5

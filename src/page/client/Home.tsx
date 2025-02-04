@@ -5,6 +5,7 @@ import { firstLetterUpperCase } from '../../utils/upperLowerConvert'
 import { axiosFetchFacilityUnits } from '../../axios/index'
 import { useUser } from '../../context/UserContext'
 import heroImage from '../../assets/home2.jpg'
+import heroPic from '../../assets/hero1.svg'
 import homePic from '../../assets/2.jpg'
 
 const Home = () => {
@@ -31,54 +32,19 @@ const Home = () => {
 
     return (
         // first
-        // <div className=" bg-white flex flex-col md:flex-row md:m-0 overflow-hidden">
-        //     <div className="md:w-1/2 w-full">
-        //         <img src={homePic} alt="Hero" className="w-full h-full object-cover object-top" />
-        //     </div>
-
-        //     <div className="md:w-1/2 w-full">
-        //         <div className="flex flex-col justify-center items-center p-8 md:p-0">
-        //             {/* Text Section */}
-        //             <div className="text-center flex flex-col mt-7 md:mt-32">
-        //                 <h1 className="text-4xl md:text-6xl font-bold text-gray-700 mb-4">Let's Play Today</h1>
-        //                 <p className="text-lg md:text-xl text-gray-600 mb-8">Choose your sport to start booking.</p>
-        //             </div>
-        //             {/* Facility Unit Buttons */}
-        //             <div className="flex flex-wrap justify-center gap-4">
-        //                 {facilityUnit.length > 0 &&
-        //                     facilityUnit.map((unit, index) => (
-        //                         <button
-        //                             key={index}
-        //                             onClick={() => navigate(`/booking-client/${unit.name}`)}
-        //                             className="bg-gradient-to-tl from-green-500 to-green-700 text-white py-2 px-6 rounded-full shadow-md hover:bg-green-600 focus:outline-none transition duration-300"
-        //                         >
-        //                             {firstLetterUpperCase(unit.name)}
-        //                         </button>
-        //                     ))}
-        //             </div>
-        //         </div>
-        //     </div>
-        // </div>
-
-        <div className=" bg-white flex flex-col md:flex-row md:ml-6">
-            <div className="hidden md:block md:w-1/2">
-                <img src={homePic} alt="Hero" className="w-full h-full object-cover object-top rounded mt-0 md:mt-10" />
-            </div>
-            <div className="block md:hidden w-full">
-                <img
-                    src={heroImage}
-                    alt="Hero"
-                    className="w-full h-full object-cover object-top rounded mt-0 md:mt-10"
-                />
+        <div className=" bg-white flex flex-col md:flex-row md:m-0 overflow-hidden">
+            <div className="md:w-1/2 w-full">
+                <img src={heroPic} alt="Hero" className="w-full h-full object-cover object-top" />
             </div>
 
-            <div className="md:w-1/2 w-full flex flex-col justify-center">
-           
-                    <div className="text-center flex flex-col mt-14 md:mt-32">
+            <div className="md:w-1/2 w-full">
+                <div className="flex flex-col justify-center items-center p-8 md:p-0">
+                    {/* Text Section */}
+                    <div className="text-center flex flex-col mt-7 md:mt-32">
                         <h1 className="text-4xl md:text-6xl font-bold text-gray-700 mb-4">Let's Play Today</h1>
                         <p className="text-lg md:text-xl text-gray-600 mb-8">Choose your sport to start booking.</p>
                     </div>
-
+                    {/* Facility Unit Buttons */}
                     <div className="flex flex-wrap justify-center gap-4">
                         {facilityUnit.length > 0 &&
                             facilityUnit.map((unit, index) => (
@@ -92,8 +58,43 @@ const Home = () => {
                             ))}
                     </div>
                 </div>
-     
+            </div>
         </div>
+
+        // <div className=" bg-white flex flex-col md:flex-row md:ml-6">
+        //     <div className="hidden md:block md:w-1/2">
+        //         <img src={homePic} alt="Hero" className="w-full h-full object-cover object-top rounded mt-0 md:mt-10" />
+        //     </div>
+        //     <div className="block md:hidden w-full">
+        //         <img
+        //             src={heroImage}
+        //             alt="Hero"
+        //             className="w-full h-full object-cover object-top rounded mt-0 md:mt-10"
+        //         />
+        //     </div>
+
+        //     <div className="md:w-1/2 w-full flex flex-col justify-center">
+           
+        //             <div className="text-center flex flex-col mt-14 md:mt-32">
+        //                 <h1 className="text-4xl md:text-6xl font-bold text-gray-700 mb-4">Let's Play Today</h1>
+        //                 <p className="text-lg md:text-xl text-gray-600 mb-8">Choose your sport to start booking.</p>
+        //             </div>
+
+        //             <div className="flex flex-wrap justify-center gap-4">
+        //                 {facilityUnit.length > 0 &&
+        //                     facilityUnit.map((unit, index) => (
+        //                         <button
+        //                             key={index}
+        //                             onClick={() => navigate(`/booking-client/${unit.name}`)}
+        //                             className="bg-gradient-to-tl from-green-500 to-green-700 text-white py-2 px-6 rounded-full shadow-md hover:bg-green-600 focus:outline-none transition duration-300"
+        //                         >
+        //                             {firstLetterUpperCase(unit.name)}
+        //                         </button>
+        //                     ))}
+        //             </div>
+        //         </div>
+     
+        // </div>
         //pic is in column
         //  <div className="relative bg-white h-screen">
 

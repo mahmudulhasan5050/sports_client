@@ -5,6 +5,7 @@ import { FaArrowRightToBracket } from 'react-icons/fa6'
 import { getToken, removeToken, tokenDecodeFunc } from '../../../utils/cookiesFunc'
 import AvatarDropdown from '../AvatarDropdown'
 import { useUser } from '../../../context/UserContext'
+import sportslot from '../../../assets/sportslot1.png'
 
 export const HeaderClient = () => {
     const { userCTX, setUserCTX } = useUser()
@@ -29,11 +30,11 @@ export const HeaderClient = () => {
         <header className="mx-auto flex w-full max-w-7xl items-center justify-between md:mt-4 p-4 md:p-0 bg-white ">
             {/* Tennis Center Title */}
             <Link to="/" style={{ textDecoration: 'none' }}>
-                <h1 className="text-2xl md:text-4xl font-extrabold text-gray-800 tracking-tight">
-                    <span className="bg-blue-700 text-slate-100 px-2 mt-1 md:mt-3 border-2 text-lg md:text-3xl">
-                        TENNIS CENTER
-                    </span>
-                </h1>
+         
+               
+                        <img alt='logo' src={sportslot}  className="h-16 md:h-24"/>
+                 
+           
             </Link>
             {/* User Section (Avatar or Login Button) */}
             <div className="flex items-center space-x-4">
