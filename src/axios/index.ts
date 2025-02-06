@@ -86,5 +86,5 @@ export const axiosEditUser = async(userId:string, userData: User) => customAxios
 
 
 //stripe
-export const axiosStripeCheckout = async() => await API.post('/checkout')
+export const axiosStripeCheckout = async(bookingInfo:CreateBookingObjType) => await API.post('/checkout',bookingInfo)
 export const axiosVerifyPayment = async(session_id: string) => await API.post('/checkout/verify-payment', {session_id})

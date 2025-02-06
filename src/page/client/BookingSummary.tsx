@@ -25,7 +25,7 @@ const BookingSummary = () => {
     //     bookingInfo.paymentAmount = 0
     // }
 
-    const confirmBookingHandle = async () => {
+    const confirmBookingAtCounterHandle = async () => {
         if (bookingInfo) {
             bookingInfo.paymentAtCounter = true
 
@@ -35,38 +35,28 @@ const BookingSummary = () => {
                 if (res.data) {
                     toast.success('Booking successful')
                     localStorage.clear()
+                    setPayAtCounterLoading(false)
                     navigate('/booking-success')
                 }
             } catch (error) {
                 toast.error('Booking is not possible!')
-            } finally {
-                setPayAtCounterLoading(false)
             }
         }
     }
 
-    const paymentHandle = async () => {
+    const stripePaymentHandle = async () => {
         if (bookingInfo && userCTX) {
+            setPayNowLoading(true)
             try {
-                const resStripe = await axiosStripeCheckout()
-                const {url} = resStripe.data
+                const resStripe = await axiosStripeCheckout(bookingInfo)
+                const {url, sessionId} = resStripe.data
                 if(url){
+                    localStorage.setItem('stripeSessionId', sessionId)
+                    setPayNowLoading(false)
                     window.location.href = url
-                }
-                // payment success
-                setPayNowLoading(true)
-                bookingInfo.isPaid = true
-
-                const res = await axiosUserBookingCreate(bookingInfo.facilityId, bookingInfo)
-                if (res.data) {
-                    toast.success('Payment and booking successful.')
-                    localStorage.clear()
-                    navigate('/booking-success')
                 }
             } catch (error) {
                 toast.error('Payment failed!')
-            } finally {
-                setPayNowLoading(false)
             }
         }
     }
@@ -114,19 +104,19 @@ const BookingSummary = () => {
                 <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
                     <button
                         className="bg-green-500 w-full sm:w-[48%] hover:bg-green-600 text-white font-semibold py-2 px-6 rounded-md transition duration-300 flex items-center justify-center gap-2"
-                        onClick={paymentHandle}
+                        onClick={stripePaymentHandle}
                         disabled={payNowLoading}
                     >
                         {payNowLoading ? (
                             <div className="w-4 h-4 border-2 border-t-white border-b-white border-l-transparent border-r-transparent rounded-full animate-spin"></div>
                         ) : (
-                            'Pay & Confirm'
+                            'Pay Now & Confirm'
                         )}
                     </button>
 
                     <button
                         className="bg-blue-500 w-full sm:w-[48%] hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-md transition duration-300 flex items-center justify-center gap-2"
-                        onClick={confirmBookingHandle}
+                        onClick={confirmBookingAtCounterHandle}
                         disabled={payAtCounterLoading}
                     >
                         {payAtCounterLoading ? (
