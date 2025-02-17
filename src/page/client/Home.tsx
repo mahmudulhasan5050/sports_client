@@ -8,6 +8,7 @@ import heroImage from '../../assets/home2.jpg'
 import heroPic from '../../assets/hero1.svg'
 import homePic from '../../assets/2.jpg'
 
+
 const Home = () => {
     const navigate = useNavigate()
     const { userCTX } = useUser()

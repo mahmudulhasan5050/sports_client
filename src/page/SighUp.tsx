@@ -37,7 +37,7 @@ const SignUp = () => {
 
     return (
         <div className="flex items-center justify-center">
-            <div className="w-full max-w-md p-8 space-y-4 mt-24 md:mt-40 shadow-lg rounded-lg">
+            <div className="w-full max-w-md p-8 space-y-4 mt-24 md:mt-20 shadow-lg rounded-lg">
                 <form onSubmit={handleSubmit} className="w-full max-w-md p-8 space-y-4 bg-white shadow-lg rounded-lg">
                     <h2 className="text-2xl font-bold">Register</h2>
                     {error && <p className="text-center text-red-500">{error}</p>}
